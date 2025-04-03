@@ -1,38 +1,36 @@
-import express from 'express';
+import express from "express";
 import {
-    createGoal,
-    getGoals,
-    markGoalAsComplete,
-    updateGoalProgress,
-    filterAndSortGoals,
-    getNotifications,
-    deleteGoal,
-} from '../controllers/goalController.js';
-
-import authMiddleware from '../middleware/auth.js'; // Ensure user is authenticated
+  createGoal,
+  getGoals,
+  markGoalAsComplete,
+  updateGoalProgress,
+  updateMilestones,
+  getNotifications,
+  deleteGoal,
+} from "../controllers/goalController.js";
+import authMiddleware from "../middleware/auth.js";
 
 const goalRouter = express.Router();
 
 // Create a new goal
-goalRouter.post('/', authMiddleware, createGoal);
+goalRouter.post("/", authMiddleware, createGoal);
 
-// Get all goals for the authenticated user
-goalRouter.get('/', authMiddleware, getGoals);
+// Get all goals with filtering and sorting
+goalRouter.get("/", authMiddleware, getGoals);
 
-// Mark goals as complete
-goalRouter.patch('/:id/complete', authMiddleware, markGoalAsComplete);
+// Mark goal as complete
+goalRouter.patch("/:id/complete", authMiddleware, markGoalAsComplete);
 
 // Update goal progress
-goalRouter.patch('/:id/progess', authMiddleware, updateGoalProgress);
+goalRouter.patch("/:id/progress", authMiddleware, updateGoalProgress);
 
-// Filter and sort out goals
-goalRouter.get('/', authMiddleware, filterAndSortGoals);
+// Update milestones
+goalRouter.patch("/:id/milestones", authMiddleware, updateMilestones);
 
 // Fetch notifications
-goalRouter.get('/notifications', authMiddleware, getNotifications);
-
+goalRouter.get("/notifications", authMiddleware, getNotifications);
 
 // Delete a goal
-goalRouter.delete('/:id', authMiddleware, deleteGoal);
+goalRouter.delete("/:id", authMiddleware, deleteGoal);
 
 export default goalRouter;
