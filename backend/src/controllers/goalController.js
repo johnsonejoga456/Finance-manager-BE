@@ -3,14 +3,17 @@ import Goal from "../models/Goals.js";
 // Create a new goal
 export const createGoal = async (req, res) => {
   try {
-    const { title, targetAmount, deadline, category, milestones = [] } = req.body;
+    const { title, description, targetAmount, currency, deadline, category, milestones } = req.body;
     const goal = new Goal({
+      user: req.user.id,
       title,
+      description,
       targetAmount,
+      currency: currency || "USD", // Default to USD
       deadline,
       category,
-      milestones, // Optional, defaults to empty array
-      user: req.user.id,
+      milestones,
+      status: "in-progress",
     });
     await goal.save();
     res.status(201).json(goal);
@@ -19,22 +22,16 @@ export const createGoal = async (req, res) => {
   }
 };
 
-// Get all goals with filtering and sorting
+// Get Goals
 export const getGoals = async (req, res) => {
   try {
     const { status, sortBy } = req.query;
     let query = { user: req.user.id };
-
-    if (status) {
-      query.status = status; // 'in-progress' or 'completed'
-    }
+    if (status) query.status = status;
 
     let sortOption = {};
-    if (sortBy === "progress") {
-      sortOption = { currentAmount: -1 }; // Sort by raw amount since progress is virtual
-    } else if (sortBy === "deadline") {
-      sortOption = { deadline: 1 };
-    }
+    if (sortBy === "progress") sortOption = { currentAmount: -1 };
+    else if (sortBy === "deadline") sortOption = { deadline: 1 };
 
     const goals = await Goal.find(query).sort(sortOption);
     res.status(200).json(goals);
@@ -47,14 +44,32 @@ export const getGoals = async (req, res) => {
 export const markGoalAsComplete = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Marking goal as complete - Goal ID:", id);
+    console.log("User ID from auth:", req.user.id);
+
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.log("Invalid ObjectId:", id);
+      return res.status(400).json({ message: "Invalid goal ID" });
+    }
+
     const goal = await Goal.findOne({ _id: id, user: req.user.id });
-    if (!goal) return res.status(404).json({ message: "Goal not found" });
+    if (!goal) {
+      console.log("Goal not found or user mismatch:", { id, user: req.user.id });
+      return res.status(404).json({ message: "Goal not found or not authorized" });
+    }
+
+    console.log("Goal found:", goal);
+
+    // Update status
     goal.status = "completed";
-    goal.currentAmount = goal.targetAmount;
-    await goal.save();
-    res.status(200).json(goal);
+    const updatedGoal = await goal.save();
+    console.log("Goal updated:", updatedGoal);
+
+    res.status(200).json(updatedGoal);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error in markGoalAsComplete:", error.message, error.stack);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
