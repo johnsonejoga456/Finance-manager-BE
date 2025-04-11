@@ -36,5 +36,8 @@ transactionRouter.get('/budget-status', authMiddleware, getBudgetStatus); // Bud
 transactionRouter.get('/analytics/income-expenses', authMiddleware, getTotalIncomeAndExpenses); // Total income/expenses
 transactionRouter.get('/analytics/income-vs-expenses', authMiddleware, getIncomeVsExpensesReport); // Income vs expenses report
 transactionRouter.get('/analytics/expense-breakdown', authMiddleware, getCategoricalExpenseBreakdown); // Expense breakdown
+transactionRouter.get('/plaid/link', authMiddleware, getPlaidLinkToken);
+transactionRouter.post('/plaid/exchange', authMiddleware, exchangePlaidToken);
+transactionRouter.get('/plaid/sync', authMiddleware, syncBankTransactionsManual);
 
 export default transactionRouter;

@@ -4,6 +4,8 @@ import { createObjectCsvWriter } from 'csv-writer';
 import puppeteer from 'puppeteer';
 import CurrencyConverter from 'currency-converter-lt';
 import { Readable } from 'stream';
+import Plaid from 'plaid';
+import BankAccount from '../models/BankAccount.js';
 
 // Utility to convert currency to USD
 const convertToUSD = async (amount, fromCurrency) => {
@@ -342,6 +344,75 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
     }, {});
 
     sendResponse(res, 200, true, breakdown);
+  } catch (error) {
+    sendResponse(res, 500, false, null, error.message);
+  }
+};
+
+const plaidClient = new Plaid.Client({
+  clientID: process.env.PLAID_CLIENT_ID,
+  secret: process.env.PLAID_SECRET,
+  env: process.env.PLAID_ENV === 'sandbox' ? Plaid.environments.sandbox : Plaid.environments.development,
+});
+
+// Generate Plaid Link Token
+export const getPlaidLinkToken = async (req, res) => {
+  try {
+    const response = await plaidClient.createLinkToken({
+      user: { client_user_id: req.user.id },
+      client_name: 'Finance Manager',
+      products: ['transactions'],
+      country_codes: ['US'],
+      language: 'en',
+    });
+    sendResponse(res, 200, true, response.link_token);
+  } catch (error) {
+    sendResponse(res, 500, false, null, error.message);
+  }
+};
+
+// Exchange Public Token for Access Token
+export const exchangePlaidToken = async (req, res) => {
+  try {
+    const { publicToken } = req.body;
+    const response = await plaidClient.exchangePublicToken(publicToken);
+    const bankAccount = new BankAccount({
+      user: req.user.id,
+      accessToken: response.access_token,
+      itemId: response.item_id,
+    });
+    await bankAccount.save();
+    await syncBankTransactions(response.access_token, req.user.id);
+    sendResponse(res, 200, true, null, 'Bank account linked successfully');
+  } catch (error) {
+    sendResponse(res, 500, false, null, error.message);
+  }
+};
+
+// Sync Transactions from Plaid
+const syncBankTransactions = async (accessToken, userId) => {
+  const response = await plaidClient.getTransactions(accessToken, '2023-01-01', new Date().toISOString().split('T')[0], { count: 100 });
+  const transactions = response.transactions.map(t => ({
+    user: userId,
+    type: t.amount > 0 ? 'expense' : 'income',
+    amount: Math.abs(t.amount),
+    category: t.category ? t.category[0] : 'Uncategorized',
+    notes: t.name,
+    date: t.date,
+    currency: t.iso_currency_code || 'USD',
+  }));
+
+  await Transaction.insertMany(transactions, { ordered: false });
+};
+
+// Manual Sync Endpoint
+export const syncBankTransactionsManual = async (req, res) => {
+  try {
+    const accounts = await BankAccount.find({ user: req.user.id });
+    for (const account of accounts) {
+      await syncBankTransactions(account.accessToken, req.user.id);
+    }
+    sendResponse(res, 200, true, null, 'Transactions synced successfully');
   } catch (error) {
     sendResponse(res, 500, false, null, error.message);
   }
