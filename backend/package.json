@@ -26,6 +26,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.16",
+    "plaid": "^31.1.0",
     "puppeteer": "^23.4.1",
     "socket.io": "^4.8.0"
   },
