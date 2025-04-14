@@ -1,7 +1,3 @@
-Got it—thanks for sharing the original `Goals.jsx`! I’ll pivot the documentation to focus on explaining the **features of the Goals Page** and **how users can utilize it**, written in a user-friendly style rather than a technical spec. This will serve as a guide for end-users of your finance manager app, highlighting what they can do, how to interact with the page, and why it’s valuable. I’ll base it on the `Goals.jsx` you provided, assuming it’s fully implemented with `GoalCard`, `MilestoneList`, and related components styled as we’ve discussed (Mantine-based, sleek, modern).
-
----
-
 # Goals Page User Guide
 
 Welcome to the **Goals Page** of your Finance Manager app! This is your hub for setting, tracking, and achieving your financial dreams—whether it’s saving for a vacation, paying off debt, or building an emergency fund. Here’s everything you need to know to make the most of it.
@@ -170,7 +166,3 @@ Each `GoalCard` (see your Mantine-styled version) is packed with tools:
 
 ## Why You’ll Love It
 The Goals Page turns financial planning into a visual, interactive experience. With its gradient backgrounds, bold typography, and responsive grid, it’s as pleasing to use as it is practical. Whether you’re saving small or dreaming big, this page keeps you organized and inspired.
-
----
-
-Does this capture the user-focused guide you were looking for? I’ve tailored it to the features in your `Goals.jsx`, assuming the Mantine-styled `GoalCard` and `GoalForm` are fully integrated. Let me know if you want to adjust the tone, add screenshots, or expand any section! How’s it feeling for your users?
