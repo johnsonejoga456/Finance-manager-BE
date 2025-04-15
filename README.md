@@ -164,5 +164,3 @@ Each `GoalCard` (see your Mantine-styled version) is packed with tools:
 
 ---
 
-## Why You’ll Love It
-The Goals Page turns financial planning into a visual, interactive experience. With its gradient backgrounds, bold typography, and responsive grid, it’s as pleasing to use as it is practical. Whether you’re saving small or dreaming big, this page keeps you organized and inspired.
