@@ -153,14 +153,5 @@ Each `GoalCard` (see your Mantine-styled version) is packed with tools:
 - **Set Clear Goals:** Use specific targets (e.g., “$1,000 for emergency fund”) to stay focused.
 - **Break It Down:** Add milestones (e.g., $250, $500) to feel progress along the way.
 - **Check Notifications:** Don’t miss deadlines—act on alerts promptly.
-- **Celebrate Wins:** Mark goals complete and enjoy the teal “Completed” badge!
-
----
-
-## Troubleshooting
-- **Goals Not Loading?** Ensure you’re online. If “Failed to load goals” persists, log out and back in.
-- **Can’t Save a Goal?** Check all required fields (title, target amount) are filled.
-- **Notifications Missing?** They update after actions like completing a goal—give it a moment.
-
----
+- **Celebrate Wins:** Mark goals complete and enjoy the teal “Completed
 
