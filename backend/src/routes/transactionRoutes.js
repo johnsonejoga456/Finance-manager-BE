@@ -1,7 +1,7 @@
 import express from 'express';
-import { 
-  addTransaction, 
-  getTransactions, 
+import {
+  addTransaction,
+  getTransactions,
   getTransactionById,
   updateTransaction,
   deleteTransaction,
@@ -12,30 +12,33 @@ import {
   getBudgetStatus,
   getTotalIncomeAndExpenses,
   getIncomeVsExpensesReport,
-  getCategoricalExpenseBreakdown
+  getCategoricalExpenseBreakdown,
+  getPlaidLinkToken,
+  exchangePlaidToken,
+  syncBankTransactionsManual,
 } from '../controllers/transactionController.js';
-import { 
-  validateTransaction,
-  validateTransactionId,
-  validateSearchTransactions 
-} from '../middleware/transactionValidation.js';
 import authMiddleware from '../middleware/auth.js';
 
 const transactionRouter = express.Router();
 
-transactionRouter.get('/', authMiddleware, getTransactions); // List all transactions
-transactionRouter.get('/:id', authMiddleware, validateTransactionId, getTransactionById); // Get single transaction
-transactionRouter.post('/', authMiddleware, validateTransaction, addTransaction); // Add transaction
-transactionRouter.put('/:id', authMiddleware, validateTransactionId, validateTransaction, updateTransaction); // Update transaction
-transactionRouter.delete('/:id', authMiddleware, validateTransactionId, deleteTransaction); // Delete transaction
-transactionRouter.post('/bulk', authMiddleware, bulkUpdateTransactions); // Bulk actions
-transactionRouter.get('/search', authMiddleware, validateSearchTransactions, searchTransactions); // Search transactions
-transactionRouter.get('/export/csv', authMiddleware, exportTransactions); // Export CSV
-transactionRouter.get('/export/pdf', authMiddleware, exportTransactionsAsPDF); // Export PDF
-transactionRouter.get('/budget-status', authMiddleware, getBudgetStatus); // Budget status
-transactionRouter.get('/analytics/income-expenses', authMiddleware, getTotalIncomeAndExpenses); // Total income/expenses
-transactionRouter.get('/analytics/income-vs-expenses', authMiddleware, getIncomeVsExpensesReport); // Income vs expenses report
-transactionRouter.get('/analytics/expense-breakdown', authMiddleware, getCategoricalExpenseBreakdown); // Expense breakdown
+// Transaction Routes
+transactionRouter.post('/', authMiddleware, addTransaction);
+transactionRouter.get('/', authMiddleware, getTransactions);
+transactionRouter.get('/:id', authMiddleware, getTransactionById);
+transactionRouter.put('/:id', authMiddleware, updateTransaction);
+transactionRouter.delete('/:id', authMiddleware, deleteTransaction);
+transactionRouter.post('/bulk', authMiddleware, bulkUpdateTransactions);
+transactionRouter.get('/search', authMiddleware, searchTransactions);
+transactionRouter.get('/export/csv', authMiddleware, exportTransactions);
+transactionRouter.get('/export/pdf', authMiddleware, exportTransactionsAsPDF);
+transactionRouter.get('/budget-status', authMiddleware, getBudgetStatus);
+
+// Analytics Routes
+transactionRouter.get('/analytics/income-expenses', authMiddleware, getTotalIncomeAndExpenses);
+transactionRouter.get('/analytics/income-vs-expenses', authMiddleware, getIncomeVsExpensesReport);
+transactionRouter.get('/analytics/expense-breakdown', authMiddleware, getCategoricalExpenseBreakdown);
+
+// Plaid Routes
 transactionRouter.get('/plaid/link', authMiddleware, getPlaidLinkToken);
 transactionRouter.post('/plaid/exchange', authMiddleware, exchangePlaidToken);
 transactionRouter.get('/plaid/sync', authMiddleware, syncBankTransactionsManual);
