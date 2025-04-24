@@ -1,23 +1,40 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const BudgetSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+const budgetSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  period: {
+    startDate: {
+      type: Date,
+      required: true,
     },
-    category: {
-        type: String,
-        required: true,
+    endDate: {
+      type: Date,
+      required: true,
     },
-    amount: {
-        type: Number,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
+  },
+  recurrence: {
+    type: String,
+    enum: ['none', 'daily', 'weekly', 'monthly'],
+    default: 'none',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-export default mongoose.model('Budget', BudgetSchema);
+export default mongoose.model('Budget', budgetSchema);

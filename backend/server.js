@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import notificationRouter from './src/routes/notificationRoutes.js';
 import authRouter from './src/routes/authRoutes.js';
 import transactionRouter from './src/routes/transactionRoutes.js';
+import budgetRouter from './src/routes/budgetRoutes.js';
 import errorHandler from './src/errorHandler.js';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -65,6 +66,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/goals', goalRouter);
 app.use('/api/transactions', transactionRouter);
+app.use('/api/budgets', budgetRouter);
 app.use('/api/notifications', notificationRouter);
 
 // Error handling middleware
