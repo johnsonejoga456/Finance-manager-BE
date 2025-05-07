@@ -1,7 +1,8 @@
+import mongoose from 'mongoose';
 import Budget from '../models/Budget.js';
 import Transaction from '../models/Transaction.js';
 
-// Standardized response helper (reused from transactionController.js)
+// Standardized response helper
 const sendResponse = (res, status, success, data = null, message = '') => {
   res.status(status).json({ success, data, message });
 };
@@ -52,13 +53,12 @@ export const getBudgets = async (req, res) => {
 // Get a single budget by ID
 export const getBudgetById = async (req, res) => {
   try {
-    const budget = await Budget.findById(req.params.id);
-    if (!budget) {
-      return sendResponse(res, 404, false, null, 'Budget not found');
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return sendResponse(res, 400, false, null, 'Invalid budget ID');
     }
-    if (budget.user.toString() !== req.user.id) {
-      return sendResponse(res, 401, false, null, 'Not authorized');
-    }
+    // Budget already fetched and validated by checkBudgetOwnership
+    const budget = req.budget;
     sendResponse(res, 200, true, budget, 'Budget retrieved successfully');
   } catch (error) {
     console.error('Get budget by ID error:', error.message);
@@ -70,14 +70,7 @@ export const getBudgetById = async (req, res) => {
 export const updateBudget = async (req, res) => {
   try {
     const { category, amount, period, recurrence } = req.body;
-    const budget = await Budget.findById(req.params.id);
-
-    if (!budget) {
-      return sendResponse(res, 404, false, null, 'Budget not found');
-    }
-    if (budget.user.toString() !== req.user.id) {
-      return sendResponse(res, 401, false, null, 'Not authorized');
-    }
+    const budget = req.budget; // From checkBudgetOwnership
 
     // Validate input
     if (period && (!period.startDate || !period.endDate)) {
@@ -107,14 +100,7 @@ export const updateBudget = async (req, res) => {
 // Delete a budget
 export const deleteBudget = async (req, res) => {
   try {
-    const budget = await Budget.findById(req.params.id);
-    if (!budget) {
-      return sendResponse(res, 404, false, null, 'Budget not found');
-    }
-    if (budget.user.toString() !== req.user.id) {
-      return sendResponse(res, 401, false, null, 'Not authorized');
-    }
-
+    const budget = req.budget; // From checkBudgetOwnership
     await budget.deleteOne();
     sendResponse(res, 200, true, null, 'Budget deleted successfully');
   } catch (error) {

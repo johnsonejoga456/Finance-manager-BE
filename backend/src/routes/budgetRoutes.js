@@ -9,16 +9,19 @@ import {
   getBudgetInsights,
 } from '../controllers/budgetController.js';
 import authMiddleware from '../middleware/auth.js';
+import checkBudgetOwnership from '../middleware/budgetMiddleware.js';
 
 const router = express.Router();
 
-// Budget routes, all protected by authMiddleware
+// Routes without budget ID (use authMiddleware)
 router.post('/', authMiddleware, createBudget);
 router.get('/', authMiddleware, getBudgets);
-router.get('/:id', authMiddleware, getBudgetById);
-router.put('/:id', authMiddleware, updateBudget);
-router.delete('/:id', authMiddleware, deleteBudget);
 router.get('/status', authMiddleware, getBudgetStatus);
 router.get('/insights', authMiddleware, getBudgetInsights);
+
+// Routes with budget ID (use checkBudgetOwnership)
+router.get('/:id', authMiddleware, checkBudgetOwnership, getBudgetById);
+router.put('/:id', authMiddleware, checkBudgetOwnership, updateBudget);
+router.delete('/:id', authMiddleware, checkBudgetOwnership, deleteBudget);
 
 export default router;
