@@ -13,9 +13,6 @@ import {
   getTotalIncomeAndExpenses,
   getIncomeVsExpensesReport,
   getCategoricalExpenseBreakdown,
-  getPlaidLinkToken,
-  exchangePlaidToken,
-  syncBankTransactionsManual,
 } from '../controllers/transactionController.js';
 import authMiddleware from '../middleware/auth.js';
 
@@ -32,15 +29,11 @@ transactionRouter.get('/search', authMiddleware, searchTransactions);
 transactionRouter.get('/export/csv', authMiddleware, exportTransactions);
 transactionRouter.get('/export/pdf', authMiddleware, exportTransactionsAsPDF);
 transactionRouter.get('/budget-status', authMiddleware, getBudgetStatus);
+transactionRouter.post('/import/csv', authMiddleware, importCSV);
 
 // Analytics Routes
 transactionRouter.get('/analytics/income-expenses', authMiddleware, getTotalIncomeAndExpenses);
 transactionRouter.get('/analytics/income-vs-expenses', authMiddleware, getIncomeVsExpensesReport);
 transactionRouter.get('/analytics/expense-breakdown', authMiddleware, getCategoricalExpenseBreakdown);
-
-// Plaid Routes
-transactionRouter.get('/plaid/link', authMiddleware, getPlaidLinkToken);
-transactionRouter.post('/plaid/exchange', authMiddleware, exchangePlaidToken);
-transactionRouter.get('/plaid/sync', authMiddleware, syncBankTransactionsManual);
 
 export default transactionRouter;

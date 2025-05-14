@@ -5,7 +5,7 @@ import puppeteer from 'puppeteer';
 import CurrencyConverter from 'currency-converter-lt';
 import { Readable } from 'stream';
 import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
-import BankAccount from '../models/BankAccount.js';
+import csv from 'csv-parser';
 
 // Initialize Plaid client
 const plaidClient = new PlaidApi(
@@ -369,91 +369,49 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
   }
 };
 
-// Generate Plaid Link Token
-export const getPlaidLinkToken = async (req, res) => {
+import csv from 'csv-parse';
+
+// Import Transactions from CSV
+export const importCSV = async (req, res) => {
   try {
-    // Validate Plaid credentials
-    if (!process.env.PLAID_CLIENT_ID || !process.env.PLAID_SECRET) {
-      return sendResponse(res, 500, false, null, 'Plaid credentials are missing in server configuration');
+    if (!req.files || !req.files.file) {
+      return sendResponse(res, 400, false, null, 'No file uploaded');
     }
-
-    const response = await plaidClient.linkTokenCreate({
-      user: { client_user_id: req.user.id },
-      client_name: 'Finance Manager',
-      products: ['transactions'],
-      country_codes: ['US'],
-      language: 'en',
-    });
-    sendResponse(res, 200, true, response.data.link_token, 'Plaid link token created successfully');
+    const file = req.files.file;
+    const transactions = [];
+    const stream = Readable.from(file.data.toString());
+    stream
+      .pipe(csv.parse({ columns: true, trim: true }))
+      .on('data', (row) => {
+        transactions.push({
+          user: req.user.id,
+          type: row.type,
+          subType: row.subType || null,
+          amount: parseFloat(row.amount),
+          originalAmount: parseFloat(row.originalAmount) || parseFloat(row.amount),
+          currency: row.currency || 'USD',
+          category: row.category,
+          notes: row.notes || '',
+          tags: row.tags ? row.tags.split(',') : [],
+          recurrence: row.recurrence || null,
+          date: new Date(row.date),
+          splitTransactions: row.splitTransactions
+            ? JSON.parse(row.splitTransactions).map(s => ({
+                amount: parseFloat(s.amount),
+                category: s.category,
+                notes: s.notes || '',
+              }))
+            : [],
+        });
+      })
+      .on('end', async () => {
+        const savedTransactions = await Transaction.insertMany(transactions, { ordered: false });
+        sendResponse(res, 200, true, savedTransactions, 'Transactions imported successfully');
+      })
+      .on('error', (error) => {
+        sendResponse(res, 500, false, null, `Failed to parse CSV: ${error.message}`);
+      });
   } catch (error) {
-    console.error('Plaid link token error:', error);
-    const errorMessage = error.response?.data?.error_message || error.message;
-    sendResponse(res, 500, false, null, `Failed to create Plaid link token: ${errorMessage}`);
-  }
-};
-
-// Exchange Public Token for Access Token
-export const exchangePlaidToken = async (req, res) => {
-  try {
-    const { publicToken } = req.body;
-    const response = await plaidClient.itemPublicTokenExchange({
-      public_token: publicToken,
-    });
-    const bankAccount = new BankAccount({
-      user: req.user.id,
-      accessToken: response.data.access_token,
-      itemId: response.data.item_id,
-    });
-    await bankAccount.save();
-    await syncBankTransactions(response.data.access_token, req.user.id);
-    sendResponse(res, 200, true, null, 'Bank account linked successfully');
-  } catch (error) {
-    console.error('Plaid exchange error:', error);
-    const errorMessage = error.response?.data?.error_message || error.message;
-    sendResponse(res, 500, false, null, `Failed to exchange Plaid token: ${errorMessage}`);
-  }
-};
-
-// Sync Transactions from Plaid
-const syncBankTransactions = async (accessToken, userId) => {
-  try {
-    const response = await plaidClient.transactionsGet({
-      access_token: accessToken,
-      start_date: '2023-01-01',
-      end_date: new Date().toISOString().split('T')[0],
-      options: { count: 100 },
-    });
-    const transactions = response.data.transactions.map(t => ({
-      user: userId,
-      type: t.amount > 0 ? 'expense' : 'income',
-      amount: Math.abs(t.amount),
-      category: t.category ? t.category[0] : 'Uncategorized',
-      notes: t.name,
-      date: t.date,
-      currency: t.iso_currency_code || 'USD',
-    }));
-
-    await Transaction.insertMany(transactions, { ordered: false });
-  } catch (error) {
-    console.error('Sync transactions error:', error);
-    throw error;
-  }
-};
-
-// Manual Sync Endpoint
-export const syncBankTransactionsManual = async (req, res) => {
-  try {
-    const accounts = await BankAccount.find({ user: req.user.id });
-    if (!accounts.length) {
-      return sendResponse(res, 400, false, null, 'No bank accounts linked');
-    }
-    for (const account of accounts) {
-      await syncBankTransactions(account.accessToken, req.user.id);
-    }
-    sendResponse(res, 200, true, null, 'Transactions synced successfully');
-  } catch (error) {
-    console.error('Manual sync error:', error);
-    const errorMessage = error.response?.data?.error_message || error.message;
-    sendResponse(res, 500, false, null, `Failed to sync transactions: ${errorMessage}`);
+    sendResponse(res, 500, false, null, `Failed to import transactions: ${error.message}`);
   }
 };
