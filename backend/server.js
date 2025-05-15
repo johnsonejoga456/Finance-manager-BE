@@ -50,6 +50,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(handleValidationErrors);
 app.use(fileUpload());
+
 // Disable caching
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');

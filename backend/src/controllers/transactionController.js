@@ -4,21 +4,7 @@ import { createObjectCsvWriter } from 'csv-writer';
 import puppeteer from 'puppeteer';
 import CurrencyConverter from 'currency-converter-lt';
 import { Readable } from 'stream';
-import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
-import csv from 'csv-parser';
-
-// Initialize Plaid client
-const plaidClient = new PlaidApi(
-  new Configuration({
-    basePath: process.env.PLAID_ENV === 'sandbox' ? PlaidEnvironments.sandbox : PlaidEnvironments.production,
-    baseOptions: {
-      headers: {
-        'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID,
-        'PLAID-SECRET': process.env.PLAID_SECRET,
-      },
-    },
-  })
-);
+import { parse } from 'csv-parse';
 
 // Utility to convert currency to USD
 const convertToUSD = async (amount, fromCurrency) => {
@@ -369,8 +355,6 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
   }
 };
 
-import csv from 'csv-parse';
-
 // Import Transactions from CSV
 export const importCSV = async (req, res) => {
   try {
@@ -381,7 +365,7 @@ export const importCSV = async (req, res) => {
     const transactions = [];
     const stream = Readable.from(file.data.toString());
     stream
-      .pipe(csv.parse({ columns: true, trim: true }))
+      .pipe(parse({ columns: true, trim: true })) // Fixed: Using parse function
       .on('data', (row) => {
         transactions.push({
           user: req.user.id,
