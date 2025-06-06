@@ -5,6 +5,21 @@ import PDFDocument from 'pdfkit';
 import CurrencyConverter from 'currency-converter-lt';
 import { Readable } from 'stream';
 import { parse } from 'csv-parse';
+import winston from 'winston';
+
+// Setup Winston logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console()
+  ],
+});
 
 // Utility to convert currency to USD
 const convertToUSD = async (amount, fromCurrency) => {
@@ -13,40 +28,41 @@ const convertToUSD = async (amount, fromCurrency) => {
     const converter = new CurrencyConverter({ CLIENTKEY: process.env.CURRENCY_API_KEY });
     return await converter.from(fromCurrency).to('USD').amount(amount).convert();
   } catch (error) {
-    console.error('Currency conversion error:', error.message);
+    logger.error('Currency conversion error:', error.message);
     throw new Error(`Currency conversion failed: ${error.message}`);
   }
 };
 
 // Standardized response helper
-const sendResponse = (res, status, success, data = null, error = '') => {
-  res.status(status).json({ success, data, error });
+const sendResponse = (res, status, success, data = null, message = '') => {
+  res.status(status).json({ success, data, message });
 };
 
 // Add Transaction
 export const addTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, category, date, notes, tags, recurrence, splitTransactions } = req.body;
-    const convertedAmount = await convertToUSD(amount, currency || 'USD');
+    const { type, subType, amount, category, date, notes, tags, recurrence, currency = 'USD', splitTransactions } = req.body;
+
+    const convertedAmount = await convertToUSD(amount, currency);
     const transaction = new Transaction({
       user: req.user.id,
       type,
       subType: subType || null,
-      amount: amount || splitTransaction.reduce((sum, split) => sum + split.amount, 0),
+      amount: splitTransactions ? splitTransactions.reduce((sum, split) => sum + split.amount, 0) : convertedAmount,
       originalAmount: amount,
       currency,
       category,
-      date: date || new Date(),
+      date: date || Date.now(),
       notes,
       tags,
       recurrence,
-      splitTransaction: splitTransaction || [],
+      splitTransactions: splitTransactions || [],
     });
 
     await transaction.save();
     sendResponse(res, 201, true, transaction, 'Transaction added successfully');
   } catch (error) {
-    console.error('Add transaction error:', error.message);
+    logger.error('Add transaction error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -56,6 +72,7 @@ export const getTransactions = async (req, res) => {
   try {
     const { type, category, dateRange, query, sort } = req.query;
     const filter = { user: req.user.id };
+
     if (type) filter.type = type;
     if (category) filter.category = category;
     if (dateRange) {
@@ -67,13 +84,13 @@ export const getTransactions = async (req, res) => {
         { notes: { $regex: query, $options: 'i' } },
         { category: { $regex: query, $options: 'i' } },
         { tags: { $regex: query, $options: 'i' } },
-      ]
-    };
+      ];
+    }
 
     const transactions = await Transaction.find(filter).sort(sort ? { [sort]: -1 } : { date: -1 }).limit(1000);
     sendResponse(res, 200, true, transactions);
   } catch (error) {
-    console.error('Get transactions error:', error);
+    logger.error('Get transactions error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -87,7 +104,7 @@ export const getTransactionById = async (req, res) => {
     }
     sendResponse(res, 200, true, transaction);
   } catch (error) {
-    console.error('Get transaction by ID error:', error.message);
+    logger.error('Get transaction by ID error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -118,7 +135,7 @@ export const updateTransaction = async (req, res) => {
     await transaction.save();
     sendResponse(res, 200, true, transaction, 'Transaction updated successfully');
   } catch (error) {
-    console.error('Update transaction error:', error.message);
+    logger.error('Update transaction error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -131,7 +148,7 @@ export const deleteTransaction = async (req, res) => {
     await transaction.deleteOne();
     sendResponse(res, 200, true, null, 'Transaction deleted successfully');
   } catch (error) {
-    console.error('Delete transaction error:', error.message);
+    logger.error('Delete transaction error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -165,7 +182,7 @@ export const bulkUpdateTransactions = async (req, res) => {
 
     sendResponse(res, 200, true, null, 'Transactions updated successfully');
   } catch (error) {
-    console.error('Bulk update error:', error.message);
+    logger.error('Bulk update error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -209,9 +226,9 @@ export const handleRecurringTransactions = () => {
           await newTransaction.save();
         }
       }
-      console.log('Recurring transactions processed successfully');
+      logger.info('Recurring transactions processed successfully');
     } catch (error) {
-      console.error('Error in recurring transactions:', error.message);
+      logger.error('Error in recurring transactions:', error.message);
     }
   });
 };
@@ -231,7 +248,7 @@ export const searchTransactions = async (req, res) => {
     const transactions = await Transaction.find(filters).sort({ date: -1 }).limit(1000);
     sendResponse(res, 200, true, transactions);
   } catch (error) {
-    console.error('Search transactions error:', error.message);
+    logger.error('Search transactions error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -239,47 +256,64 @@ export const searchTransactions = async (req, res) => {
 // Export Transactions as CSV
 export const exportTransactions = async (req, res) => {
   try {
+    if (!req.user?.id) {
+      logger.warn('Unauthorized access to export CSV: No user ID');
+      return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
+    }
+
+    logger.info(`Starting CSV export for user: ${req.user.id}`);
     res.set({
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename="transactions.csv"',
     });
 
-    const cursor = Transaction.find({ user: req.user.id }).limit(1000).cursor();
+    // Fetch transactions
+    const transactions = await Transaction.find({ user: req.user.id }).limit(1000).lean();
+    logger.info(`Fetched ${transactions.length} transactions for CSV export`);
+
+    if (!Array.isArray(transactions)) {
+      logger.error('Transactions is not an array:', transactions);
+      return sendResponse(res, 500, false, null, 'Invalid transaction data');
+    }
+
     const csvStream = createCsvStream({
       headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'],
     });
 
-    cursor
-      .on('data', (t) => {
+    // Validate and write each transaction
+    transactions.forEach((t, index) => {
+      try {
+        if (!t || typeof t !== 'object') {
+          throw new Error(`Invalid transaction at index ${index}`);
+        }
+        logger.debug(`Processing transaction ${index + 1}: ${t._id}`);
         csvStream.write({
           type: t.type || '',
-          amount: t.amount || 0,
+          amount: t.amount != null ? t.amount : 0,
           currency: t.currency || 'USD',
           category: t.category || '',
-          date: new Date(t.date).toLocaleDateString(),
+          date: t.date ? new Date(t.date).toLocaleDateString() : '',
           notes: t.notes || '',
         });
-      })
-      .on('error', (error) => {
-        console.error('CSV cursor error:', error.message);
-        if (!res.headersSent) {
-          sendResponse(res, 500, false, null, 'Failed to export CSV');
-        }
-      })
-      .on('end', () => {
-        csvStream.end();
-        console.log('CSV export completed');
-      });
+      } catch (error) {
+        logger.error(`Error processing transaction ${index + 1}: ${error.message}`);
+      }
+    });
 
     csvStream
       .on('error', (error) => {
-        console.error('CSV write stream error:', error.message);
+        logger.error(`CSV stream error: ${error.message}`);
+      })
+      .on('end', () => {
+        logger.info(`CSV export completed: ${transactions.length} transactions`);
       })
       .pipe(res);
+
+    csvStream.end();
   } catch (error) {
-    console.error('Export CSV error:', error.message);
+    logger.error(`Export CSV error: ${error.message}`);
     if (!res.headersSent) {
-      sendResponse(res, 500, false, null, error.message);
+      sendResponse(res, 500, false, null, `Failed to export CSV: ${error.message}`);
     }
   }
 };
@@ -313,21 +347,21 @@ export const exportTransactionsAsPDF = async (req, res) => {
         doc.moveDown();
       })
       .on('error', (error) => {
-        console.error('PDF cursor error:', error.message);
+        logger.error('PDF cursor error:', error.message);
         if (!res.headersSent) {
           sendResponse(res, 500, false, null, 'Failed to export PDF');
         }
       })
       .on('end', () => {
         doc.end();
-        console.log('PDF export completed');
+        logger.info('PDF export completed');
       });
 
     doc.on('error', (error) => {
-      console.error('PDF document error:', error.message);
+      logger.error('PDF document error:', error.message);
     });
   } catch (error) {
-    console.error('Export PDF error:', error.message);
+    logger.error('Export PDF error:', error.message);
     if (!res.headersSent) {
       sendResponse(res, 500, false, null, error.message);
     }
@@ -346,7 +380,7 @@ export const getBudgetStatus = async (req, res) => {
 
     sendResponse(res, 200, true, { totalExpenses, remainingBudget, budget });
   } catch (error) {
-    console.error('Get budget status error:', error.message);
+    logger.error('Get budget status error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -360,7 +394,7 @@ export const getTotalIncomeAndExpenses = async (req, res) => {
 
     sendResponse(res, 200, true, { totalIncome, totalExpenses });
   } catch (error) {
-    console.error('Get income/expenses error:', error.message);
+    logger.error('Get income/expenses error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -376,7 +410,7 @@ export const getIncomeVsExpensesReport = async (req, res) => {
 
     sendResponse(res, 200, true, report);
   } catch (error) {
-    console.error('Get income vs expenses report error:', error.message);
+    logger.error('Get income vs expenses report error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -392,7 +426,7 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
 
     sendResponse(res, 200, true, breakdown);
   } catch (error) {
-    console.error('Get expense breakdown error:', error.message);
+    logger.error('Get expense breakdown error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -435,16 +469,16 @@ export const importCSV = async (req, res) => {
           const savedTransactions = await Transaction.insertMany(transactions, { ordered: false });
           sendResponse(res, 200, true, savedTransactions, 'Transactions imported successfully');
         } catch (error) {
-          console.error('CSV import save error:', error.message);
+          logger.error('CSV import save error:', error.message);
           sendResponse(res, 500, false, null, `Failed to save transactions: ${error.message}`);
         }
       })
       .on('error', (error) => {
-        console.error('CSV parse error:', error.message);
+        logger.error('CSV parse error:', error.message);
         sendResponse(res, 500, false, null, `Failed to parse CSV: ${error.message}`);
       });
   } catch (error) {
-    console.error('Import CSV error:', error.message);
+    logger.error('Import CSV error:', error.message);
     sendResponse(res, 500, false, null, `Failed to import transactions: ${error.message}`);
   }
 };

@@ -18,3 +18,87 @@
 {"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 61.421 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:39.203Z"}
 {"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 4.427 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:40.216Z"}
 {"level":"info","message":"\u001b[0mDELETE /api/transactions/682ecb19a65a820eeb7edc2f \u001b[32m200\u001b[0m 514.299 ms - 71\u001b[0m","timestamp":"2025-06-06T13:04:15.081Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 2690.180 ms - 425\u001b[0m","timestamp":"2025-06-06T13:44:18.688Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T13:44:35.131Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 226.641 ms - 118\u001b[0m","timestamp":"2025-06-06T13:44:39.217Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T13:44:39.350Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 210.691 ms - 118\u001b[0m","timestamp":"2025-06-06T13:44:39.449Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T13:44:39.482Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T13:44:39.494Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 1489.180 ms - 425\u001b[0m","timestamp":"2025-06-06T13:44:40.824Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 260.698 ms - 425\u001b[0m","timestamp":"2025-06-06T13:44:41.148Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 270.860 ms - 425\u001b[0m","timestamp":"2025-06-06T13:47:50.199Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 15.731 ms - 41\u001b[0m","timestamp":"2025-06-06T14:20:29.386Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 8.410 ms - 41\u001b[0m","timestamp":"2025-06-06T14:20:30.410Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 1.722 ms - 41\u001b[0m","timestamp":"2025-06-06T14:20:31.425Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 1.670 ms - 41\u001b[0m","timestamp":"2025-06-06T14:20:32.448Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 7.176 ms - 41\u001b[0m","timestamp":"2025-06-06T14:21:09.265Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 3.614 ms - 41\u001b[0m","timestamp":"2025-06-06T14:21:10.284Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 11.628 ms - 41\u001b[0m","timestamp":"2025-06-06T14:21:11.309Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 1.690 ms - 41\u001b[0m","timestamp":"2025-06-06T14:21:12.327Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T15:15:07.368Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:15:07.653Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-06T15:15:12.746Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T15:16:02.507Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 18.390 ms - 41\u001b[0m","timestamp":"2025-06-06T15:16:04.808Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 2.116 ms - 41\u001b[0m","timestamp":"2025-06-06T15:16:04.812Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 441.225 ms - 300\u001b[0m","timestamp":"2025-06-06T15:16:20.495Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:16:20.573Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 271.642 ms - 427\u001b[0m","timestamp":"2025-06-06T15:16:22.997Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 349.675 ms - 427\u001b[0m","timestamp":"2025-06-06T15:16:23.350Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:16:25.508Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:16:25.912Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 408.764 ms - 93\u001b[0m","timestamp":"2025-06-06T15:16:25.916Z"}
+{"level":"error","message":"Export CSV error:","timestamp":"2025-06-06T15:16:25.914Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:16:26.948Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:16:27.293Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 348.115 ms - 93\u001b[0m","timestamp":"2025-06-06T15:16:27.295Z"}
+{"level":"error","message":"Export CSV error:","timestamp":"2025-06-06T15:16:27.294Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:16:28.315Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:16:28.566Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 254.140 ms - 93\u001b[0m","timestamp":"2025-06-06T15:16:28.568Z"}
+{"level":"error","message":"Export CSV error:","timestamp":"2025-06-06T15:16:28.566Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:16:29.587Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:16:29.960Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 377.364 ms - 93\u001b[0m","timestamp":"2025-06-06T15:16:29.962Z"}
+{"level":"error","message":"Export CSV error:","timestamp":"2025-06-06T15:16:29.961Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T15:47:40.462Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:47:43.957Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-06T15:47:46.869Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T15:48:12.580Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 317.837 ms - 118\u001b[0m","timestamp":"2025-06-06T15:48:15.499Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 234.677 ms - 118\u001b[0m","timestamp":"2025-06-06T15:48:15.736Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:48:15.923Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T15:48:15.941Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:48:15.966Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 245.725 ms - 427\u001b[0m","timestamp":"2025-06-06T15:48:16.136Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 263.856 ms - 427\u001b[0m","timestamp":"2025-06-06T15:48:16.403Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:48:22.944Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:48:23.165Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 225.132 ms - 93\u001b[0m","timestamp":"2025-06-06T15:48:23.168Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:23.166Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:48:24.183Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:48:24.418Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 239.180 ms - 93\u001b[0m","timestamp":"2025-06-06T15:48:24.421Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:24.419Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:48:25.448Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:48:25.728Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 283.700 ms - 93\u001b[0m","timestamp":"2025-06-06T15:48:25.730Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:25.728Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T15:48:26.741Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T15:48:27.010Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 273.170 ms - 93\u001b[0m","timestamp":"2025-06-06T15:48:27.012Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:27.011Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T15:48:58.078Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 324.695 ms - 118\u001b[0m","timestamp":"2025-06-06T15:49:00.524Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:49:00.597Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 256.472 ms - 118\u001b[0m","timestamp":"2025-06-06T15:49:00.784Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T15:49:00.794Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T15:49:00.810Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 9579.762 ms - 427\u001b[0m","timestamp":"2025-06-06T15:54:41.069Z"}
+{"level":"error","message":"Get transactions error:","timestamp":"2025-06-06T15:55:05.424Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[31m500\u001b[0m 24445.412 ms - 57\u001b[0m","timestamp":"2025-06-06T15:55:05.519Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?query=d \u001b[32m200\u001b[0m 2446.195 ms - 39\u001b[0m","timestamp":"2025-06-06T15:59:11.479Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?query=dv \u001b[32m200\u001b[0m 2238.059 ms - 39\u001b[0m","timestamp":"2025-06-06T15:59:11.578Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?query=d \u001b[32m200\u001b[0m 223.025 ms - 39\u001b[0m","timestamp":"2025-06-06T15:59:11.706Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 2116.620 ms - 427\u001b[0m","timestamp":"2025-06-06T15:59:12.602Z"}
