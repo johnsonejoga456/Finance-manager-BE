@@ -1,0 +1,20 @@
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T11:34:42.036Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-06T11:34:47.999Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T13:00:57.011Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-06T13:01:07.086Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 22.456 ms - 41\u001b[0m","timestamp":"2025-06-06T13:02:04.849Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 6.525 ms - 41\u001b[0m","timestamp":"2025-06-06T13:02:04.895Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 391.119 ms - 300\u001b[0m","timestamp":"2025-06-06T13:02:33.290Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T13:02:33.384Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 266.851 ms - 814\u001b[0m","timestamp":"2025-06-06T13:02:36.172Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 231.055 ms - 814\u001b[0m","timestamp":"2025-06-06T13:02:36.407Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 5.325 ms - 69\u001b[0m","timestamp":"2025-06-06T13:02:49.199Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 3.578 ms - 69\u001b[0m","timestamp":"2025-06-06T13:02:50.216Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 2.751 ms - 69\u001b[0m","timestamp":"2025-06-06T13:02:51.227Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 3.921 ms - 69\u001b[0m","timestamp":"2025-06-06T13:02:52.240Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/pdf \u001b[32m200\u001b[0m 33.759 ms - -\u001b[0m","timestamp":"2025-06-06T13:03:00.760Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 6.237 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:37.107Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 4.694 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:38.120Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 61.421 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:39.203Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 4.427 ms - 69\u001b[0m","timestamp":"2025-06-06T13:03:40.216Z"}
+{"level":"info","message":"\u001b[0mDELETE /api/transactions/682ecb19a65a820eeb7edc2f \u001b[32m200\u001b[0m 514.299 ms - 71\u001b[0m","timestamp":"2025-06-06T13:04:15.081Z"}

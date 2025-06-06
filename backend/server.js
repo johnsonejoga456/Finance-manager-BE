@@ -14,8 +14,23 @@ import { Server } from 'socket.io';
 import dashboardRouter from './src/routes/dashboardRoutes.js';
 import goalRouter from './src/routes/goalRoutes.js';
 import fileUpload from 'express-fileupload';
+import winston from 'winston';
 
 dotenv.config();
+
+// Setup Winston logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console()
+  ],
+});
 
 const app = express();
 const server = http.createServer(app);
@@ -32,6 +47,7 @@ const io = new Server(server, {
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    logger.error('Validation errors:', errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
   next();
@@ -47,7 +63,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan('dev', { stream: { write: (msg) => logger.info(msg.trim()) } }));
 app.use(handleValidationErrors);
 app.use(fileUpload());
 
@@ -60,8 +76,8 @@ app.use((req, res, next) => {
 // MongoDB connection
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => logger.info('MongoDB connected successfully'))
+  .catch((err) => logger.error('MongoDB connection error:', err));
 
 // API Routes
 app.use('/api/auth', authRouter);
@@ -76,16 +92,11 @@ app.use(errorHandler);
 
 // Start Socket.IO for notifications
 io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
-
-  setInterval(() => {
-    socket.emit('transactionReminder', { message: 'You have a new recurring transaction!' });
-  }, 60000);
-
+  logger.info('New client connected:', socket.id);
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
+    logger.info('Client disconnected:', socket.id);
   });
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => logger.info(`Server running on port ${PORT}`));
