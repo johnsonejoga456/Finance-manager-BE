@@ -104,22 +104,22 @@ export const getTransactionById = async (req, res) => {
     }
     sendResponse(res, 200, true, transaction);
   } catch (error) {
-    logger.error('Get transaction by ID error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    logger.error('Get transaction by ID:', error.message);
+    sendResponse(res, error.message);
   }
 };
 
 // Update Transaction
 export const updateTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, category, notes, tags, recurrence, currency, splitTransactions } = req.body;
+    const { type, subType, amount, } = req.body;
     const transaction = await Transaction.findById(req.params.id);
 
-    if (!transaction) return sendResponse(res, 404, false, null, 'Transaction not found');
-    if (transaction.user.toString() !== req.user.id) return sendResponse(res, 401, false, null, 'Not authorized');
+    if (!transaction) return sendResponse(res, 'Transaction not found');
+    if (transaction.user.toString() !== req.user.id) return sendResponse(res, 'Not authorized');
 
     const convertedAmount = currency && amount ? await convertToUSD(amount, currency) : transaction.amount;
-    Object.assign(transaction, {
+    Object.assign(transaction, transaction, {
       type: type || transaction.type,
       subType: subType || transaction.subType,
       amount: splitTransactions ? splitTransactions.reduce((sum, split) => sum + split.amount, 0) : convertedAmount,
@@ -133,10 +133,10 @@ export const updateTransaction = async (req, res) => {
     });
 
     await transaction.save();
-    sendResponse(res, 200, true, transaction, 'Transaction updated successfully');
+    sendResponse(res, true, transaction, 'Transaction updated successfully');
   } catch (error) {
     logger.error('Update transaction error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, false, null, error.message);
   }
 };
 
@@ -276,17 +276,26 @@ export const exportTransactions = async (req, res) => {
       return sendResponse(res, 500, false, null, 'Invalid transaction data');
     }
 
+    if (transactions.length === 0) {
+      logger.info('No transactions found for CSV export');
+      const csvStream = createCsvStream({ headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'] });
+      csvStream.pipe(res);
+      csvStream.end();
+      return;
+    }
+
     const csvStream = createCsvStream({
       headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'],
     });
 
-    // Validate and write each transaction
-    transactions.forEach((t, index) => {
+    // Process each transaction
+    for (let i = 0; i < transactions.length; i++) {
+      const t = transactions[i];
       try {
         if (!t || typeof t !== 'object') {
-          throw new Error(`Invalid transaction at index ${index}`);
+          throw new Error(`Invalid transaction at index ${i}`);
         }
-        logger.debug(`Processing transaction ${index + 1}: ${t._id}`);
+        logger.debug(`Processing transaction ${i + 1}: ${t._id}`);
         csvStream.write({
           type: t.type || '',
           amount: t.amount != null ? t.amount : 0,
@@ -296,9 +305,9 @@ export const exportTransactions = async (req, res) => {
           notes: t.notes || '',
         });
       } catch (error) {
-        logger.error(`Error processing transaction ${index + 1}: ${error.message}`);
+        logger.error(`Error processing transaction ${i + 1}: ${error.message}`);
       }
-    });
+    }
 
     csvStream
       .on('error', (error) => {

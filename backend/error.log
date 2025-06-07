@@ -7,3 +7,14 @@
 {"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:25.728Z"}
 {"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T15:48:27.011Z"}
 {"level":"error","message":"Get transactions error:","timestamp":"2025-06-06T15:55:05.424Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-06T18:05:38.915Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:42.789Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:44.060Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:45.303Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:46.582Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T10:49:57.113Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T10:51:10.989Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T11:09:20.399Z"}
+{"level":"error","message":"Export CSV error: read ECONNRESET","timestamp":"2025-06-07T11:11:57.501Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-07T11:12:28.307Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-07T11:12:30.362Z"}

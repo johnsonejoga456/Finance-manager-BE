@@ -29,7 +29,6 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.16",
     "pdfkit": "^0.17.1",
-    "plaid": "^31.1.0",
     "puppeteer": "^23.4.1",
     "socket.io": "^4.8.0",
     "winston": "^3.17.0"

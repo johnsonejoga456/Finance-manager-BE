@@ -102,3 +102,100 @@
 {"level":"info","message":"\u001b[0mGET /api/transactions?query=dv \u001b[32m200\u001b[0m 2238.059 ms - 39\u001b[0m","timestamp":"2025-06-06T15:59:11.578Z"}
 {"level":"info","message":"\u001b[0mGET /api/transactions?query=d \u001b[32m200\u001b[0m 223.025 ms - 39\u001b[0m","timestamp":"2025-06-06T15:59:11.706Z"}
 {"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 2116.620 ms - 427\u001b[0m","timestamp":"2025-06-06T15:59:12.602Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T16:06:15.078Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T16:12:24.449Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T16:12:49.575Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T16:16:18.412Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T16:26:13.375Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T18:02:57.107Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T18:05:12.708Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T18:05:13.442Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[33m401\u001b[0m 9.540 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:32.584Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[33m401\u001b[0m 2.281 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:32.589Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[33m401\u001b[0m 5.628 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:32.602Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[33m401\u001b[0m 7.979 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:32.615Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-06T18:05:38.915Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[33m401\u001b[0m 8.530 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:51.625Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[33m401\u001b[0m 4.058 ms - 41\u001b[0m","timestamp":"2025-06-06T18:05:51.639Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T18:06:08.908Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 9.187 ms - 41\u001b[0m","timestamp":"2025-06-06T18:06:11.395Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 2.314 ms - 41\u001b[0m","timestamp":"2025-06-06T18:06:11.401Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 10032.812 ms - 26\u001b[0m","timestamp":"2025-06-06T18:06:47.172Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 10011.993 ms - 26\u001b[0m","timestamp":"2025-06-06T18:06:54.178Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-06T18:18:08.396Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-06T18:18:13.928Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 479.160 ms - 300\u001b[0m","timestamp":"2025-06-06T18:18:32.286Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-06T18:18:32.440Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 260.591 ms - 427\u001b[0m","timestamp":"2025-06-06T18:18:35.709Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 230.293 ms - 427\u001b[0m","timestamp":"2025-06-06T18:18:35.942Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 231.510 ms - 69\u001b[0m","timestamp":"2025-06-06T18:20:41.982Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 230.527 ms - 55\u001b[0m","timestamp":"2025-06-06T18:20:41.995Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 217.542 ms - 69\u001b[0m","timestamp":"2025-06-06T18:20:42.203Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 220.294 ms - 55\u001b[0m","timestamp":"2025-06-06T18:20:42.222Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 3823.621 ms - 427\u001b[0m","timestamp":"2025-06-06T18:20:51.091Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 226.136 ms - 427\u001b[0m","timestamp":"2025-06-06T18:20:51.326Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 275.675 ms - 140\u001b[0m","timestamp":"2025-06-06T18:20:56.083Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 283.020 ms - 2\u001b[0m","timestamp":"2025-06-06T18:20:56.086Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 227.198 ms - 140\u001b[0m","timestamp":"2025-06-06T18:20:56.317Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 226.339 ms - 2\u001b[0m","timestamp":"2025-06-06T18:20:56.321Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=completed \u001b[32m200\u001b[0m 266.880 ms - 727\u001b[0m","timestamp":"2025-06-06T18:21:03.604Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 279.142 ms - 140\u001b[0m","timestamp":"2025-06-06T18:21:03.610Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 221.087 ms - 427\u001b[0m","timestamp":"2025-06-06T18:22:40.438Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 221.196 ms - 427\u001b[0m","timestamp":"2025-06-06T18:22:40.662Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T18:22:42.567Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T18:22:42.787Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 225.817 ms - 93\u001b[0m","timestamp":"2025-06-06T18:22:42.790Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:42.789Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T18:22:43.810Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T18:22:44.059Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 253.824 ms - 93\u001b[0m","timestamp":"2025-06-06T18:22:44.061Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:44.060Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T18:22:45.080Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T18:22:45.302Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 225.199 ms - 93\u001b[0m","timestamp":"2025-06-06T18:22:45.304Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:45.303Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-06T18:22:46.315Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-06T18:22:46.581Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 269.204 ms - 93\u001b[0m","timestamp":"2025-06-06T18:22:46.584Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-06T18:22:46.582Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-06T19:23:31.118Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-07T10:38:31.061Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-07T10:49:32.045Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T10:49:57.113Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-07T10:50:49.834Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T10:51:10.989Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-07T11:09:00.313Z"}
+{"code":"ETIMEOUT","hostname":"_mongodb._tcp.finance-manager-app.js4tj.mongodb.net","level":"error","message":"MongoDB connection error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net","stack":"Error: querySrv ETIMEOUT _mongodb._tcp.finance-manager-app.js4tj.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:291:17)","syscall":"querySrv","timestamp":"2025-06-07T11:09:20.399Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-07T11:10:00.787Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-07T11:10:05.397Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 2119.092 ms - 300\u001b[0m","timestamp":"2025-06-07T11:11:11.690Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-07T11:11:11.838Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 7855.324 ms - 427\u001b[0m","timestamp":"2025-06-07T11:11:23.518Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 1152.276 ms - 427\u001b[0m","timestamp":"2025-06-07T11:11:24.676Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-07T11:11:26.883Z"}
+{"level":"error","message":"Export CSV error: read ECONNRESET","timestamp":"2025-06-07T11:11:57.501Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 30621.747 ms - 79\u001b[0m","timestamp":"2025-06-07T11:11:57.503Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-07T11:11:58.535Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-07T11:12:28.305Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 29774.656 ms - 93\u001b[0m","timestamp":"2025-06-07T11:12:28.310Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-07T11:12:28.307Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[33m401\u001b[0m 0.748 ms - 45\u001b[0m","timestamp":"2025-06-07T11:12:28.315Z"}
+{"level":"info","message":"\u001b[0mGET /favicon.ico \u001b[33m404\u001b[0m 6.558 ms - 150\u001b[0m","timestamp":"2025-06-07T11:12:29.660Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-07T11:12:30.122Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-07T11:12:30.361Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions/export/csv \u001b[31m500\u001b[0m 244.834 ms - 93\u001b[0m","timestamp":"2025-06-07T11:12:30.365Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-07T11:12:30.362Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 254.192 ms - 2\u001b[0m","timestamp":"2025-06-07T11:12:53.503Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 229.900 ms - 2\u001b[0m","timestamp":"2025-06-07T11:12:53.737Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 1395.956 ms - 140\u001b[0m","timestamp":"2025-06-07T11:12:54.650Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 268.168 ms - 140\u001b[0m","timestamp":"2025-06-07T11:12:54.925Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 246.353 ms - 427\u001b[0m","timestamp":"2025-06-07T11:13:08.490Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 215.713 ms - 427\u001b[0m","timestamp":"2025-06-07T11:13:08.707Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 274.068 ms - 2\u001b[0m","timestamp":"2025-06-07T11:13:22.499Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 296.799 ms - 140\u001b[0m","timestamp":"2025-06-07T11:13:22.510Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 247.137 ms - 2\u001b[0m","timestamp":"2025-06-07T11:13:22.750Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 240.244 ms - 140\u001b[0m","timestamp":"2025-06-07T11:13:22.755Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=completed \u001b[32m200\u001b[0m 270.960 ms - 727\u001b[0m","timestamp":"2025-06-07T11:13:26.642Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 280.341 ms - 140\u001b[0m","timestamp":"2025-06-07T11:13:26.647Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-07T11:31:50.940Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-07T11:53:44.298Z"}
