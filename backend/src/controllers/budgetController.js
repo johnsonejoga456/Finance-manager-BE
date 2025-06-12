@@ -1,52 +1,14 @@
 import mongoose from 'mongoose';
 import Budget from '../models/Budget.js';
 import Transaction from '../models/Transaction.js';
-import winston from 'winston';
 import cron from 'node-cron';
-
-// Setup Winston logger
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
-    new winston.transports.Console()
-  ],
-});
+import { write as createCsvStream } from 'fast-csv';
+import PDFDocument from 'pdfkit';
+import { getPeriodDates } from '../../utils/dateUtils.js';
 
 // Standardized response helper
 const sendResponse = (res, status, success, data = null, message = '') => {
   res.status(status).json({ success, data, message });
-};
-
-// Calculate period dates
-const getPeriodDates = (period, customPeriod) => {
-  const now = new Date();
-  let startDate, endDate;
-  switch (period) {
-    case 'weekly':
-      startDate = new Date(now.setDate(now.getDate() - now.getDay()));
-      endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6);
-      break;
-    case 'yearly':
-      startDate = new Date(now.getFullYear(), 0, 1);
-      endDate = new Date(now.getFullYear(), 11, 31);
-      break;
-    case 'custom':
-      startDate = new Date(customPeriod?.startDate);
-      endDate = new Date(customPeriod?.endDate);
-      break;
-    case 'monthly':
-    default:
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  }
-  return { startDate, endDate };
 };
 
 // Create a new budget
@@ -54,7 +16,6 @@ export const createBudget = async (req, res) => {
   try {
     const { category, amount, currency, period, customPeriod, recurrence, rollover, alertThreshold } = req.body;
 
-    // Validate input
     if (!category || !amount || !period) {
       return sendResponse(res, 400, false, null, 'Missing required fields: category, amount, period');
     }
@@ -69,7 +30,7 @@ export const createBudget = async (req, res) => {
       user: req.user.id,
       category,
       amount,
-      currency,
+      currency: currency || 'USD',
       period,
       customPeriod: period === 'custom' ? {
         startDate: new Date(customPeriod.startDate),
@@ -81,10 +42,10 @@ export const createBudget = async (req, res) => {
     });
 
     await budget.save();
-    logger.info(`Budget created: ${budget._id} for user ${req.user.id}`);
+    console.log(`Budget created: ${budget._id} for user ${req.user.id}`);
     sendResponse(res, 201, true, budget, 'Budget created successfully');
   } catch (error) {
-    logger.error('Create budget error:', error.message);
+    console.error('Create budget error:', error.message);
     sendResponse(res, 500, false, null, `Failed to create budget: ${error.message}`);
   }
 };
@@ -95,7 +56,7 @@ export const getBudgets = async (req, res) => {
     const budgets = await Budget.find({ user: req.user.id }).sort({ createdAt: -1 });
     sendResponse(res, 200, true, budgets, 'Budgets retrieved successfully');
   } catch (error) {
-    logger.error('Get budgets error:', error.message);
+    console.error('Get budgets error:', error.message);
     sendResponse(res, 500, false, null, `Failed to retrieve budgets: ${error.message}`);
   }
 };
@@ -106,10 +67,9 @@ export const getBudgetById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return sendResponse(res, 400, false, null, 'Invalid budget ID');
     }
-    const budget = req.budget;
-    sendResponse(res, 200, true, budget, 'Budget retrieved successfully');
+    sendResponse(res, 200, true, req.budget, 'Budget retrieved successfully');
   } catch (error) {
-    logger.error('Get budget by ID error:', error.message);
+    console.error('Get budget by ID error:', error.message);
     sendResponse(res, 500, false, null, `Failed to retrieve budget: ${error.message}`);
   }
 };
@@ -140,10 +100,10 @@ export const updateBudget = async (req, res) => {
     budget.alertThreshold = alertThreshold !== undefined ? alertThreshold : budget.alertThreshold;
 
     await budget.save();
-    logger.info(`Budget updated: ${budget._id} for user ${req.user.id}`);
+    console.log(`Budget updated: ${budget._id} for user ${req.user.id}`);
     sendResponse(res, 200, true, budget, 'Budget updated successfully');
   } catch (error) {
-    logger.error('Update budget error:', error.message);
+    console.error('Update budget error:', error.message);
     sendResponse(res, 500, false, null, `Failed to update budget: ${error.message}`);
   }
 };
@@ -151,12 +111,11 @@ export const updateBudget = async (req, res) => {
 // Delete a budget
 export const deleteBudget = async (req, res) => {
   try {
-    const budget = req.budget;
-    await budget.deleteOne();
-    logger.info(`Budget deleted: ${budget._id} for user ${req.user.id}`);
+    await req.budget.deleteOne();
+    console.log(`Budget deleted: ${req.budget._id} for user ${req.user.id}`);
     sendResponse(res, 200, true, null, 'Budget deleted successfully');
   } catch (error) {
-    logger.error('Delete budget error:', error.message);
+    console.error('Delete budget error:', error.message);
     sendResponse(res, 500, false, null, `Failed to delete budget: ${error.message}`);
   }
 };
@@ -192,16 +151,16 @@ export const getBudgetStatus = async (req, res) => {
         remaining,
         percentage,
         period: budget.period,
-        periodDates: { startDate, endDate },
+        periodDates: { startDate: startDate.toISOString(), endDate: endDate.toISOString() },
         recurrence: budget.recurrence,
         rollover: budget.rollover,
-        alertTriggered,
+        alertThreshold: budget.alertThreshold,
       };
     }));
 
     sendResponse(res, 200, true, status, 'Budget status retrieved successfully');
   } catch (error) {
-    logger.error('Get budget status error:', error.message);
+    console.error('Get budget status error:', error.message);
     sendResponse(res, 500, false, null, `Failed to retrieve budget status: ${error.message}`);
   }
 };
@@ -233,75 +192,183 @@ export const getBudgetInsights = async (req, res) => {
 
     const categories = insights.map(i => i.category);
     const spending = insights.map(i => ({
+      category: i.category,
       budgeted: i.budgeted,
       spent: i.spent,
     }));
 
     sendResponse(res, 200, true, { categories, spending }, 'Budget insights retrieved successfully');
   } catch (error) {
-    logger.error('Get budget insights error:', error.message);
+    console.error('Get budget insights error:', error.message);
     sendResponse(res, 500, false, null, `Failed to retrieve budget insights: ${error.message}`);
   }
 };
 
 // Handle recurring budgets
 export const handleRecurringBudgets = () => {
-  cron.schedule('0 0 1 * *', async () => { // Run monthly on the 1st
+  cron.schedule('0 0 1 * *', async () => {
     try {
       const now = new Date();
       const budgets = await Budget.find({ recurrence: { $ne: 'none' } });
 
+      if (!budgets.length) {
+        console.log('No recurring budgets to process');
+        return;
+      }
+
       for (const budget of budgets) {
         const { startDate, endDate } = getPeriodDates(budget.period, budget.customPeriod);
-        let shouldRenew = false;
+        if (endDate >= now) continue;
 
-        switch (budget.recurrence) {
-          case 'daily':
-            shouldRenew = true;
-            break;
-          case 'weekly':
-            shouldRenew = now.getDay() === 0; // Renew on Sunday
-            break;
-          case 'monthly':
-            shouldRenew = now.getDate() === 1;
-            break;
-        }
-
-        if (shouldRenew && endDate < now) {
-          const newPeriod = getPeriodDates(budget.period, budget.customPeriod);
-          let newAmount = budget.amount;
-
-          if (budget.rollover) {
-            const transactions = await Transaction.find({
-              user: budget.user,
-              type: 'expense',
-              category: budget.category,
-              date: { $gte: startDate, $lte: endDate },
-            });
-            const spent = transactions.reduce((sum, t) => sum + t.amount, 0);
-            const remaining = budget.amount - spent;
-            newAmount += remaining > 0 ? remaining : 0;
-          }
-
-          const newBudget = new Budget({
+        let newAmount = budget.amount;
+        if (budget.rollover) {
+          const transactions = await Transaction.find({
             user: budget.user,
+            type: 'expense',
             category: budget.category,
-            amount: newAmount,
-            currency: budget.currency,
-            period: budget.period,
-            customPeriod: budget.period === 'custom' ? newPeriod : undefined,
-            recurrence: budget.recurrence,
-            rollover: budget.rollover,
-            alertThreshold: budget.alertThreshold,
+            date: { $gte: startDate, $lte: endDate },
           });
-
-          await newBudget.save();
-          logger.info(`Recurring budget created: ${newBudget._id} for user ${budget.user}`);
+          const spent = transactions.reduce((sum, t) => sum + t.amount, 0);
+          const remaining = budget.amount - spent;
+          newAmount += remaining > 0 ? remaining : 0;
         }
+
+        const newPeriod = getPeriodDates(budget.period, budget.customPeriod);
+        const newBudget = new Budget({
+          user: budget.user,
+          category: budget.category,
+          amount: newAmount,
+          currency: budget.currency,
+          period: budget.period,
+          customPeriod: budget.period === 'custom' ? newPeriod : undefined,
+          recurrence: budget.recurrence,
+          rollover: budget.rollover,
+          alertThreshold: budget.alertThreshold,
+        });
+
+        await newBudget.save();
+        console.log(`Recurring budget created: ${newBudget._id} for user ${budget.user}`);
       }
-      logger.info('Recurring budgets processed successfully');
+      console.log('Recurring budgets processed successfully');
     } catch (error) {
-      logger.error('Recurring budgets error:', error.message);
+      console.error('Recurring budgets error:', error.message);
     }
   });
+};
+
+// Export Budgets as CSV
+export const exportBudgets = async (req, res) => {
+  try {
+    if (!req.user?.id) {
+      console.warn('Unauthorized access to export CSV: No user ID');
+      return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
+    }
+
+    console.log(`Starting CSV export for user: ${req.user.id}`);
+    res.set({
+      'Content-Type': 'text/csv',
+      'Content-Disposition': 'attachment; filename="budgets.csv"',
+    });
+
+    const cursor = Budget.find({ user: req.user.id }).cursor();
+    const csvStream = createCsvStream({
+      headers: ['category', 'amount', 'currency', 'period', 'startDate', 'endDate', 'recurrence', 'rollover', 'alertThreshold'],
+    });
+
+    cursor
+      .on('data', (b) => {
+        const { startDate, endDate } = getPeriodDates(b.period, b.customPeriod);
+        csvStream.write({
+          category: b.category || '',
+          amount: b.amount != null ? b.amount : 0,
+          currency: b.currency || 'USD',
+          period: b.period || '',
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          recurrence: b.recurrence || 'none',
+          rollover: b.rollover ? 'Yes' : 'No',
+          alertThreshold: b.alertThreshold || 90,
+        });
+      })
+      .on('error', (error) => {
+        console.error('CSV cursor error:', error.message);
+        if (!res.headersSent) {
+          sendResponse(res, 500, false, null, 'Failed to export CSV');
+        }
+      })
+      .on('end', () => {
+        csvStream.end();
+        console.log('CSV export completed');
+      });
+
+    csvStream
+      .on('error', (error) => {
+        console.error('CSV write stream error:', error.message);
+      })
+      .pipe(res);
+  } catch (error) {
+    console.error('Export CSV error:', error.message);
+    if (!res.headersSent) {
+      sendResponse(res, 500, false, null, `Failed to export CSV: ${error.message}`);
+    }
+  }
+};
+
+// Export Budgets as PDF
+export const exportBudgetsAsPDF = async (req, res) => {
+  try {
+    if (!req.user?.id) {
+      console.warn('Unauthorized access to export PDF: No user ID');
+      return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
+    }
+
+    console.log(`Starting PDF export for user: ${req.user.id}`);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="budgets.pdf"',
+    });
+
+    const doc = new PDFDocument();
+    doc.pipe(res);
+
+    doc.fontSize(16).text('Budget Report', { align: 'center' });
+    doc.moveDown();
+
+    const budgets = await Budget.find({ user: req.user.id });
+    let yPosition = doc.y;
+
+    budgets.forEach((b, index) => {
+      const { startDate, endDate } = getPeriodDates(b.period, b.customPeriod);
+      doc.fontSize(12).text(`Budget ${index + 1}`, { align: 'left' });
+      doc.text(`Category: ${b.category || '-'}`);
+      doc.text(`Amount: ${b.amount != null ? b.amount.toFixed(2) : '0.00'} ${b.currency || 'USD'}`);
+      doc.text(`Period: ${b.period || '-'}`);
+      doc.text(`Start Date: ${startDate.toLocaleDateString()}`);
+      doc.text(`End Date: ${endDate.toLocaleDateString()}`);
+      doc.text(`Recurrence: ${b.recurrence || 'none'}`);
+      doc.text(`Rollover: ${b.rollover ? 'Yes' : 'No'}`);
+      doc.text(`Alert Threshold: ${b.alertThreshold}%`);
+      doc.moveDown();
+      yPosition = doc.y;
+      if (yPosition > 700) {
+        doc.addPage();
+        yPosition = doc.y;
+      }
+    });
+
+    doc.end();
+    console.log('PDF export completed');
+
+    doc.on('error', (error) => {
+      console.error('PDF document error:', error.message);
+      if (!res.headersSent) {
+        sendResponse(res, 500, false, null, 'Failed to export PDF');
+      }
+    });
+  } catch (error) {
+    console.error('Export PDF error:', error.message);
+    if (!res.headersSent) {
+      sendResponse(res, 500, false, null, `Failed to export PDF: ${error.message}`);
+    }
+  }
 };
