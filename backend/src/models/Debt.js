@@ -1,5 +1,4 @@
-import mongoose from 'joi';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; // Correct import
 
 const DebtSchema = new mongoose.Schema({
   user: {
@@ -55,7 +54,7 @@ const DebtSchema = new mongoose.Schema({
   }],
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 

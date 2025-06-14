@@ -281,3 +281,287 @@
 {"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 454.990 ms - 167\u001b[0m","timestamp":"2025-06-12T00:58:28.050Z"}
 {"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 487.407 ms - 370\u001b[0m","timestamp":"2025-06-12T00:58:28.078Z"}
 {"level":"info","message":"\u001b[0mGET /api/budgets/export/pdf \u001b[32m200\u001b[0m 45.734 ms - -\u001b[0m","timestamp":"2025-06-12T00:59:10.405Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 270.468 ms - 312\u001b[0m","timestamp":"2025-06-12T01:18:38.018Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 451.545 ms - 370\u001b[0m","timestamp":"2025-06-12T01:18:38.227Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 475.623 ms - 167\u001b[0m","timestamp":"2025-06-12T01:18:38.255Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 220.309 ms - 312\u001b[0m","timestamp":"2025-06-12T01:18:47.602Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 435.601 ms - 370\u001b[0m","timestamp":"2025-06-12T01:18:47.824Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 460.472 ms - 167\u001b[0m","timestamp":"2025-06-12T01:18:47.854Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 236.257 ms - 312\u001b[0m","timestamp":"2025-06-12T01:18:49.528Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 426.880 ms - 167\u001b[0m","timestamp":"2025-06-12T01:18:49.730Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 456.260 ms - 370\u001b[0m","timestamp":"2025-06-12T01:18:49.757Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 222.585 ms - 312\u001b[0m","timestamp":"2025-06-12T01:18:58.970Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 477.807 ms - 370\u001b[0m","timestamp":"2025-06-12T01:18:59.231Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 565.725 ms - 167\u001b[0m","timestamp":"2025-06-12T01:18:59.325Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 214.513 ms - 312\u001b[0m","timestamp":"2025-06-12T01:19:01.408Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 433.094 ms - 370\u001b[0m","timestamp":"2025-06-12T01:19:01.635Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 471.227 ms - 167\u001b[0m","timestamp":"2025-06-12T01:19:01.680Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T02:03:35.605Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T02:44:32.661Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T03:03:00.479Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T05:06:38.107Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T07:07:59.491Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 46.129 ms - 41\u001b[0m","timestamp":"2025-06-12T07:08:00.650Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 3.502 ms - 41\u001b[0m","timestamp":"2025-06-12T07:08:00.656Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 41793.184 ms - 26\u001b[0m","timestamp":"2025-06-12T07:09:00.944Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 26321.504 ms - 300\u001b[0m","timestamp":"2025-06-12T07:09:12.091Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T07:09:12.177Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 4972.990 ms - 300\u001b[0m","timestamp":"2025-06-12T07:09:14.741Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T07:09:14.764Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T07:09:14.786Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 3135.900 ms - 312\u001b[0m","timestamp":"2025-06-12T07:09:21.198Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 3375.007 ms - 312\u001b[0m","timestamp":"2025-06-12T07:09:24.580Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 6516.268 ms - 370\u001b[0m","timestamp":"2025-06-12T07:09:24.594Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 4221.795 ms - 370\u001b[0m","timestamp":"2025-06-12T07:09:28.824Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 12071.908 ms - 167\u001b[0m","timestamp":"2025-06-12T07:09:30.159Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 1632.167 ms - 167\u001b[0m","timestamp":"2025-06-12T07:09:31.794Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T07:16:01.226Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[0m-\u001b[0m - ms - -\u001b[0m","timestamp":"2025-06-12T07:16:23.207Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[0m-\u001b[0m - ms - -\u001b[0m","timestamp":"2025-06-12T07:16:23.213Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[31m500\u001b[0m 30018.970 ms - 26\u001b[0m","timestamp":"2025-06-12T07:16:55.183Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[31m500\u001b[0m 30007.530 ms - 26\u001b[0m","timestamp":"2025-06-12T07:17:15.187Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 42076.069 ms - 26\u001b[0m","timestamp":"2025-06-12T07:22:40.808Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 36260.158 ms - 300\u001b[0m","timestamp":"2025-06-12T07:22:58.830Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T07:22:59.081Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 1966.033 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:42.917Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 353.805 ms - 140\u001b[0m","timestamp":"2025-06-12T08:05:43.160Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 2186.876 ms - 370\u001b[0m","timestamp":"2025-06-12T08:05:43.163Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 439.437 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:43.367Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 227.291 ms - 140\u001b[0m","timestamp":"2025-06-12T08:05:43.396Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 750.070 ms - 370\u001b[0m","timestamp":"2025-06-12T08:05:43.924Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 1425.222 ms - 2\u001b[0m","timestamp":"2025-06-12T08:05:44.221Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 3454.476 ms - 167\u001b[0m","timestamp":"2025-06-12T08:05:44.435Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 223.227 ms - 2\u001b[0m","timestamp":"2025-06-12T08:05:44.450Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 477.416 ms - 167\u001b[0m","timestamp":"2025-06-12T08:05:44.917Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 245.162 ms - 427\u001b[0m","timestamp":"2025-06-12T08:05:48.950Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 232.772 ms - 427\u001b[0m","timestamp":"2025-06-12T08:05:49.185Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 212.315 ms - 727\u001b[0m","timestamp":"2025-06-12T08:05:49.284Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 220.966 ms - 727\u001b[0m","timestamp":"2025-06-12T08:05:49.507Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 255.062 ms - 427\u001b[0m","timestamp":"2025-06-12T08:05:51.201Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 298.929 ms - 427\u001b[0m","timestamp":"2025-06-12T08:05:51.503Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 245.549 ms - 727\u001b[0m","timestamp":"2025-06-12T08:05:53.800Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 317.268 ms - 727\u001b[0m","timestamp":"2025-06-12T08:05:54.120Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 498.675 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:55.639Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 1292.226 ms - 370\u001b[0m","timestamp":"2025-06-12T08:05:56.436Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 791.776 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:56.439Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 1291.296 ms - 167\u001b[0m","timestamp":"2025-06-12T08:05:56.442Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 541.072 ms - 167\u001b[0m","timestamp":"2025-06-12T08:05:57.172Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 568.454 ms - 370\u001b[0m","timestamp":"2025-06-12T08:05:57.196Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 234.727 ms - 140\u001b[0m","timestamp":"2025-06-12T08:05:57.864Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 254.359 ms - 2\u001b[0m","timestamp":"2025-06-12T08:05:57.880Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 195.059 ms - 140\u001b[0m","timestamp":"2025-06-12T08:05:58.061Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 229.053 ms - 2\u001b[0m","timestamp":"2025-06-12T08:05:58.113Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 382.498 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:59.474Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 865.497 ms - 370\u001b[0m","timestamp":"2025-06-12T08:05:59.963Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 869.545 ms - 167\u001b[0m","timestamp":"2025-06-12T08:05:59.970Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 490.555 ms - 312\u001b[0m","timestamp":"2025-06-12T08:05:59.975Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 1172.096 ms - 427\u001b[0m","timestamp":"2025-06-12T08:06:01.361Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 1434.666 ms - 370\u001b[0m","timestamp":"2025-06-12T08:06:01.401Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 1427.845 ms - 167\u001b[0m","timestamp":"2025-06-12T08:06:01.405Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 265.359 ms - 427\u001b[0m","timestamp":"2025-06-12T08:06:01.628Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 343.523 ms - 427\u001b[0m","timestamp":"2025-06-12T08:10:10.674Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 240.069 ms - 427\u001b[0m","timestamp":"2025-06-12T08:10:10.918Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T11:04:49.400Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T11:26:31.880Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T11:36:48.440Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T12:09:32.030Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T12:45:15.169Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T12:51:26.721Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T12:57:23.420Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T12:57:44.067Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T14:57:17.595Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T16:00:38.757Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T16:08:29.693Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-12T19:03:37.092Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-12T19:13:14.768Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T06:48:07.850Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[33m401\u001b[0m 31.027 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.340Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[33m401\u001b[0m 4.802 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.356Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[33m401\u001b[0m 3.381 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.362Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[33m401\u001b[0m 4.160 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.370Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[33m401\u001b[0m 3.406 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.379Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[33m401\u001b[0m 5.682 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:06.390Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T07:00:14.454Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 12.564 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:16.937Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 3.638 ms - 41\u001b[0m","timestamp":"2025-06-13T07:00:16.990Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 2336.340 ms - 300\u001b[0m","timestamp":"2025-06-13T07:00:50.664Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T07:00:50.742Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 473.550 ms - 300\u001b[0m","timestamp":"2025-06-13T07:00:51.128Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T07:00:51.145Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T07:00:51.165Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 251.981 ms - 312\u001b[0m","timestamp":"2025-06-13T07:00:55.090Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 241.786 ms - 312\u001b[0m","timestamp":"2025-06-13T07:00:55.336Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 1607.601 ms - 370\u001b[0m","timestamp":"2025-06-13T07:00:56.469Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 1612.135 ms - 167\u001b[0m","timestamp":"2025-06-13T07:00:56.488Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 426.059 ms - 370\u001b[0m","timestamp":"2025-06-13T07:00:56.900Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 444.555 ms - 167\u001b[0m","timestamp":"2025-06-13T07:00:56.987Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 285.978 ms - 427\u001b[0m","timestamp":"2025-06-13T07:10:12.042Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 231.028 ms - 427\u001b[0m","timestamp":"2025-06-13T07:10:12.275Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 239.660 ms - 312\u001b[0m","timestamp":"2025-06-13T07:10:12.984Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 482.467 ms - 370\u001b[0m","timestamp":"2025-06-13T07:10:13.216Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 474.163 ms - 167\u001b[0m","timestamp":"2025-06-13T07:10:13.227Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 241.147 ms - 312\u001b[0m","timestamp":"2025-06-13T07:10:13.235Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 438.329 ms - 370\u001b[0m","timestamp":"2025-06-13T07:10:13.667Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 441.367 ms - 167\u001b[0m","timestamp":"2025-06-13T07:10:13.683Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 296.136 ms - 2\u001b[0m","timestamp":"2025-06-13T07:10:14.038Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 303.183 ms - 140\u001b[0m","timestamp":"2025-06-13T07:10:14.055Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 242.665 ms - 2\u001b[0m","timestamp":"2025-06-13T07:10:14.302Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 248.683 ms - 140\u001b[0m","timestamp":"2025-06-13T07:10:14.316Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T07:31:49.774Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T13:11:39.650Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[33m401\u001b[0m 32.335 ms - 41\u001b[0m","timestamp":"2025-06-13T14:20:13.298Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[33m401\u001b[0m 6.419 ms - 41\u001b[0m","timestamp":"2025-06-13T14:20:13.327Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[33m401\u001b[0m 6.548 ms - 41\u001b[0m","timestamp":"2025-06-13T14:29:13.530Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[33m401\u001b[0m 6.214 ms - 41\u001b[0m","timestamp":"2025-06-13T14:29:13.540Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[33m401\u001b[0m 2.930 ms - 41\u001b[0m","timestamp":"2025-06-13T14:29:13.550Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[33m401\u001b[0m 2.946 ms - 41\u001b[0m","timestamp":"2025-06-13T14:29:13.584Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T14:29:16.641Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 4.515 ms - 45\u001b[0m","timestamp":"2025-06-13T14:29:18.612Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 0.518 ms - 45\u001b[0m","timestamp":"2025-06-13T14:29:18.618Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 90241.437 ms - 300\u001b[0m","timestamp":"2025-06-13T15:28:57.368Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 96355.065 ms - 300\u001b[0m","timestamp":"2025-06-13T15:28:57.443Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 102926.966 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:13.589Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 102701.878 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:13.595Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 102441.003 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:13.603Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 106482.329 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:13.611Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T15:29:13.631Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 30017.996 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:27.436Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[31m500\u001b[0m 30015.977 ms - 26\u001b[0m","timestamp":"2025-06-13T15:29:27.497Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[31m500\u001b[0m 30029.255 ms - 141\u001b[0m","timestamp":"2025-06-13T15:29:49.757Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[31m500\u001b[0m 30010.912 ms - 147\u001b[0m","timestamp":"2025-06-13T15:29:49.761Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[31m500\u001b[0m 30008.756 ms - 149\u001b[0m","timestamp":"2025-06-13T15:29:49.765Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 70924.522 ms - 312\u001b[0m","timestamp":"2025-06-13T15:30:50.660Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 94020.189 ms - 370\u001b[0m","timestamp":"2025-06-13T15:31:13.762Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 94488.115 ms - 167\u001b[0m","timestamp":"2025-06-13T15:31:14.256Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T16:42:22.074Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T17:25:59.259Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 37.525 ms - 41\u001b[0m","timestamp":"2025-06-13T17:59:06.929Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 6.125 ms - 41\u001b[0m","timestamp":"2025-06-13T17:59:07.030Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 4193.948 ms - 300\u001b[0m","timestamp":"2025-06-13T18:01:35.344Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T18:01:35.429Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 256.497 ms - 2\u001b[0m","timestamp":"2025-06-13T18:05:22.003Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 241.484 ms - 2\u001b[0m","timestamp":"2025-06-13T18:05:22.247Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 1611.956 ms - 140\u001b[0m","timestamp":"2025-06-13T18:05:23.373Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 287.337 ms - 140\u001b[0m","timestamp":"2025-06-13T18:05:23.667Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-13T18:38:05.704Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T18:38:06.876Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T18:38:06.882Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-13T18:38:08.719Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T18:38:12.677Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T18:38:28.508Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 1042.989 ms - 118\u001b[0m","timestamp":"2025-06-13T18:38:57.862Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 436.301 ms - 118\u001b[0m","timestamp":"2025-06-13T18:38:58.303Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-13T18:39:02.263Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 932.487 ms - 727\u001b[0m","timestamp":"2025-06-13T18:39:03.889Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals \u001b[32m200\u001b[0m 1438.344 ms - 727\u001b[0m","timestamp":"2025-06-13T18:39:05.340Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 1445.553 ms - 427\u001b[0m","timestamp":"2025-06-13T18:39:20.198Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions \u001b[32m200\u001b[0m 1573.334 ms - 427\u001b[0m","timestamp":"2025-06-13T18:39:21.775Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 4315.825 ms - 312\u001b[0m","timestamp":"2025-06-13T18:39:32.123Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 5037.216 ms - 370\u001b[0m","timestamp":"2025-06-13T18:39:32.853Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 5031.873 ms - 167\u001b[0m","timestamp":"2025-06-13T18:39:32.857Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 735.265 ms - 312\u001b[0m","timestamp":"2025-06-13T18:39:32.863Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 817.663 ms - 167\u001b[0m","timestamp":"2025-06-13T18:39:33.692Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 833.612 ms - 370\u001b[0m","timestamp":"2025-06-13T18:39:33.700Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 217.876 ms - 140\u001b[0m","timestamp":"2025-06-13T18:39:39.762Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 227.772 ms - 2\u001b[0m","timestamp":"2025-06-13T18:39:39.765Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals/notifications \u001b[32m200\u001b[0m 243.610 ms - 140\u001b[0m","timestamp":"2025-06-13T18:39:40.011Z"}
+{"level":"info","message":"\u001b[0mGET /api/goals?status=in-progress \u001b[32m200\u001b[0m 242.529 ms - 2\u001b[0m","timestamp":"2025-06-13T18:39:40.014Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 3.730 ms - 148\u001b[0m","timestamp":"2025-06-13T18:39:48.478Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 1.276 ms - 159\u001b[0m","timestamp":"2025-06-13T18:39:48.483Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 3.246 ms - 148\u001b[0m","timestamp":"2025-06-13T18:39:48.486Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 0.915 ms - 159\u001b[0m","timestamp":"2025-06-13T18:39:48.494Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-13T18:41:43.057Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-14T11:13:30.197Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-14T11:13:33.759Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 25.116 ms - 41\u001b[0m","timestamp":"2025-06-14T11:13:58.480Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[33m401\u001b[0m 6.860 ms - 41\u001b[0m","timestamp":"2025-06-14T11:13:58.593Z"}
+{"level":"info","message":"\u001b[0mPOST /api/auth/login \u001b[32m200\u001b[0m 530.833 ms - 300\u001b[0m","timestamp":"2025-06-14T11:14:20.416Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-14T11:14:20.522Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 8.433 ms - 159\u001b[0m","timestamp":"2025-06-14T11:14:22.989Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 4.862 ms - 148\u001b[0m","timestamp":"2025-06-14T11:14:23.046Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 20.954 ms - 159\u001b[0m","timestamp":"2025-06-14T11:14:23.063Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 1.145 ms - 148\u001b[0m","timestamp":"2025-06-14T11:14:23.095Z"}
+{"level":"info","message":"\u001b[0mPOST /api/debts \u001b[33m404\u001b[0m 0.716 ms - 149\u001b[0m","timestamp":"2025-06-14T11:15:28.410Z"}
+{"level":"info","message":"\u001b[0mPOST /api/debts \u001b[33m404\u001b[0m 0.477 ms - 149\u001b[0m","timestamp":"2025-06-14T11:15:34.842Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-14T11:29:22.236Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 466.188 ms - 118\u001b[0m","timestamp":"2025-06-14T11:29:24.821Z"}
+{"level":"info","message":"\u001b[0mGET /api/auth/me \u001b[32m200\u001b[0m 260.578 ms - 118\u001b[0m","timestamp":"2025-06-14T11:29:25.087Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 10.485 ms - 148\u001b[0m","timestamp":"2025-06-14T11:29:25.370Z"}
+{"level":"info","message":"New client connected:","timestamp":"2025-06-14T11:29:25.383Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 11.224 ms - 159\u001b[0m","timestamp":"2025-06-14T11:29:25.390Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 13.647 ms - 148\u001b[0m","timestamp":"2025-06-14T11:29:25.396Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts/strategies \u001b[33m404\u001b[0m 7.546 ms - 159\u001b[0m","timestamp":"2025-06-14T11:29:25.444Z"}
+{"level":"info","message":"\u001b[0mPOST /api/debts \u001b[33m404\u001b[0m 0.466 ms - 149\u001b[0m","timestamp":"2025-06-14T11:29:47.157Z"}
+{"level":"info","message":"\u001b[0mPOST /api/debts \u001b[33m404\u001b[0m 0.481 ms - 149\u001b[0m","timestamp":"2025-06-14T11:29:48.183Z"}
+{"level":"info","message":"\u001b[0mGET /api/debts \u001b[33m404\u001b[0m 0.787 ms - 148\u001b[0m","timestamp":"2025-06-14T11:30:02.228Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 10388.761 ms - 312\u001b[0m","timestamp":"2025-06-14T11:50:00.316Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 13147.348 ms - 167\u001b[0m","timestamp":"2025-06-14T11:50:03.116Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 13151.716 ms - 370\u001b[0m","timestamp":"2025-06-14T11:50:03.124Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 2803.797 ms - 312\u001b[0m","timestamp":"2025-06-14T11:50:03.131Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 16587.517 ms - 370\u001b[0m","timestamp":"2025-06-14T11:50:19.739Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 16607.558 ms - 167\u001b[0m","timestamp":"2025-06-14T11:50:19.750Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 17383.738 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:24.247Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 4941.215 ms - 312\u001b[0m","timestamp":"2025-06-14T11:50:29.205Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 12693.584 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:33.203Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 10079.067 ms - 370\u001b[0m","timestamp":"2025-06-14T11:50:34.350Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 15833.296 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:40.552Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 12031.057 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:41.254Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 8274.562 ms - 312\u001b[0m","timestamp":"2025-06-14T11:50:48.847Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 17398.402 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:50.606Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 21167.210 ms - 307\u001b[0m","timestamp":"2025-06-14T11:50:55.522Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 8138.928 ms - 312\u001b[0m","timestamp":"2025-06-14T11:50:56.991Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 18173.793 ms - 370\u001b[0m","timestamp":"2025-06-14T11:50:59.450Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 2985.937 ms - 312\u001b[0m","timestamp":"2025-06-14T11:51:00.001Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 10100.719 ms - 307\u001b[0m","timestamp":"2025-06-14T11:51:00.720Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 53360.383 ms - 307\u001b[0m","timestamp":"2025-06-14T11:51:01.546Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 1601.853 ms - 312\u001b[0m","timestamp":"2025-06-14T11:51:01.606Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 3440.003 ms - 370\u001b[0m","timestamp":"2025-06-14T11:51:02.893Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 38613.581 ms - 167\u001b[0m","timestamp":"2025-06-14T11:51:02.896Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 6371.230 ms - 167\u001b[0m","timestamp":"2025-06-14T11:51:07.094Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 4597.503 ms - 312\u001b[0m","timestamp":"2025-06-14T11:51:07.498Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 6490.289 ms - 167\u001b[0m","timestamp":"2025-06-14T11:51:08.041Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 7077.144 ms - 167\u001b[0m","timestamp":"2025-06-14T11:51:08.687Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 14255.908 ms - 370\u001b[0m","timestamp":"2025-06-14T11:51:17.161Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 9667.237 ms - 312\u001b[0m","timestamp":"2025-06-14T11:51:17.190Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?category=Technology&dateRange=2025-06-08,2025-06-14 \u001b[32m200\u001b[0m 9565.695 ms - 39\u001b[0m","timestamp":"2025-06-14T11:51:17.610Z"}
+{"level":"info","message":"Client disconnected:","timestamp":"2025-06-14T11:51:17.691Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 15548.520 ms - 167\u001b[0m","timestamp":"2025-06-14T11:51:22.645Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 11623.303 ms - 310\u001b[0m","timestamp":"2025-06-14T11:51:25.908Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 3560.770 ms - 315\u001b[0m","timestamp":"2025-06-14T11:51:26.210Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 9505.647 ms - 310\u001b[0m","timestamp":"2025-06-14T11:51:26.686Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 9139.364 ms - 370\u001b[0m","timestamp":"2025-06-14T11:51:26.764Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 9598.813 ms - 310\u001b[0m","timestamp":"2025-06-14T11:51:26.810Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?category=Technology&dateRange=2025-06-08,2025-06-14 \u001b[32m200\u001b[0m 5750.642 ms - 39\u001b[0m","timestamp":"2025-06-14T11:51:32.575Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 5736.316 ms - 315\u001b[0m","timestamp":"2025-06-14T11:51:32.646Z"}
+{"level":"info","message":"\u001b[0mPUT /api/budgets/684a139c6dcc65d4626b434f \u001b[32m200\u001b[0m 38302.130 ms - 310\u001b[0m","timestamp":"2025-06-14T11:51:33.836Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 26282.070 ms - 173\u001b[0m","timestamp":"2025-06-14T11:51:53.156Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?category=Technology&dateRange=2025-06-08,2025-06-14 \u001b[32m200\u001b[0m 20598.318 ms - 39\u001b[0m","timestamp":"2025-06-14T11:51:53.179Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 20573.940 ms - 315\u001b[0m","timestamp":"2025-06-14T11:51:53.221Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 26619.025 ms - 373\u001b[0m","timestamp":"2025-06-14T11:51:53.515Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 20955.486 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:03.619Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 11482.904 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:04.636Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 11471.485 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:04.650Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 11451.960 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:04.672Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 11217.307 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:04.729Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?category=Technology&dateRange=2025-06-08,2025-06-14 \u001b[32m200\u001b[0m 2902.364 ms - 39\u001b[0m","timestamp":"2025-06-14T11:52:07.634Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 7006.577 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:10.639Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 28496.535 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:11.154Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 7191.753 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:11.830Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 7180.906 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:11.834Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 7180.075 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:11.856Z"}
+{"level":"info","message":"\u001b[0mGET /api/transactions?category=Technology&dateRange=2025-06-08,2025-06-14 \u001b[32m200\u001b[0m 4350.359 ms - 39\u001b[0m","timestamp":"2025-06-14T11:52:11.993Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 2714.438 ms - 315\u001b[0m","timestamp":"2025-06-14T11:52:13.359Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets \u001b[32m200\u001b[0m 3359.640 ms - 315\u001b[0m","timestamp":"2025-06-14T11:52:15.204Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/insights \u001b[32m200\u001b[0m 5381.927 ms - 173\u001b[0m","timestamp":"2025-06-14T11:52:16.539Z"}
+{"level":"info","message":"\u001b[0mGET /api/budgets/status \u001b[32m200\u001b[0m 5822.551 ms - 373\u001b[0m","timestamp":"2025-06-14T11:52:17.672Z"}
+{"level":"info","message":"Server running on port 5000","timestamp":"2025-06-14T12:27:37.548Z"}
+{"level":"info","message":"MongoDB connected successfully","timestamp":"2025-06-14T12:27:44.943Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-14T12:32:22.863Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-14T12:32:24.196Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-14T12:32:24.198Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-14T12:32:25.229Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-14T12:32:25.586Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-14T12:32:25.587Z"}
+{"level":"info","message":"Starting CSV export for user: 673be2f2a56a294b9ca12439","timestamp":"2025-06-14T12:32:26.613Z"}
+{"level":"info","message":"Fetched 1 transactions for CSV export","timestamp":"2025-06-14T12:32:27.101Z"}
+{"level":"error","message":"Export CSV error: rows.reduce is not a function","timestamp":"2025-06-14T12:32:27.102Z"}
