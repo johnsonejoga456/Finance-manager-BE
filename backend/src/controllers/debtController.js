@@ -17,19 +17,24 @@ export const createDebt = async (req, res) => {
       return sendResponse(res, 400, false, null, 'Missing required fields');
     }
 
+    const parsedBalance = parseFloat(balance);
+    if (isNaN(parsedBalance) || parsedBalance <= 0) {
+      return sendResponse(res, 400, false, null, 'Invalid balance');
+    }
+
     const debt = new Debt({
       user: req.user.id,
       description,
       creditor,
-      balance: parseFloat(balance),
-      initialBalance: parseFloat(balance),
+      balance: parsedBalance,
+      initialBalance: parsedBalance, // Ensure initialBalance is set
       interestRate: parseFloat(interestRate),
       minimumPayment: parseFloat(minimumPayment),
       dueDate: new Date(dueDate),
     });
 
     await debt.save();
-    console.log(`Debt created: ${debt._id} for user ${req.user.id}`);
+    console.log(`Debt created: ${debt._id} for user ${req.user.id}, initialBalance=${debt.initialBalance}`);
     sendResponse(res, 201, true, debt, 'Debt created successfully');
   } catch (error) {
     console.error('Create debt error:', error.message);
@@ -71,9 +76,14 @@ export const updateDebt = async (req, res) => {
     debt.minimumPayment = minimumPayment !== undefined ? parseFloat(minimumPayment) : debt.minimumPayment;
     debt.dueDate = dueDate ? new Date(dueDate) : debt.dueDate;
 
+    // Update initialBalance only if not set or if creating a new debt
+    if (!debt.initialBalance || debt.initialBalance === 0) {
+      debt.initialBalance = debt.balance;
+    }
+
     await debt.save();
-    console.log(`Debt updated: ${debt._id} for user ${req.user.id}`);
-    sendResponse(res, 200, true, debt, 'Debt updated successfully');
+    console.log(`Debt updated: ${debt._id} for user ${req.user.id}, initialBalance=${debt.initialBalance}`);
+    sendResponse(res, 200, true, debt, 'Debt saved successfully');
   } catch (error) {
     console.error('Update debt error:', error.message);
     sendResponse(res, 500, false, null, `Failed to update debt: ${error.message}`);
@@ -145,21 +155,22 @@ export const recordPayment = async (req, res) => {
       return sendResponse(res, 400, false, null, 'Invalid payment amount');
     }
 
-    debt.balance -= parseFloat(amount);
-    debt.paymentHistory.push({ amount: parseFloat(amount), date: new Date(date) });
+    const parsedAmount = parseFloat(amount);
+    debt.balance -= parsedAmount;
+    debt.paymentHistory.push({ amount: parsedAmount, date: new Date(date) });
 
     // Link to transaction (assuming Transaction model exists)
     const transaction = new Transaction({
       user: req.user.id,
       type: 'expense',
       category: 'Debt Repayment',
-      amount: parseFloat(amount),
+      amount: parsedAmount,
       date: new Date(date),
       notes: `Payment for ${debt.description}`,
     });
 
     await Promise.all([debt.save(), transaction.save()]);
-    console.log(`Payment recorded: ${amount} for debt ${debt._id}`);
+    console.log(`Payment recorded: ${parsedAmount} for debt ${debt._id}, initialBalance=${debt.initialBalance}`);
     sendResponse(res, 200, true, debt, 'Payment recorded successfully');
   } catch (error) {
     console.error('Record payment error:', error.message);
