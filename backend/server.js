@@ -48,7 +48,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(morgan('dev')); // Keep morgan for logging HTTP requests
+app.use(morgan('dev'));
 app.use(handleValidationErrors);
 app.use(fileUpload());
 
@@ -61,8 +61,8 @@ app.use((req, res, next) => {
 // MongoDB connection
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(() => console.log('MongoDB connected successfully')) // Change to console.log
-  .catch((err) => console.error('MongoDB connection error:', err)); // Change to console.error
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // API Routes
 app.use('/api/auth', authRouter);
@@ -78,11 +78,11 @@ app.use(errorHandler);
 
 // Start Socket.IO for notifications
 io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id); // Change to console.log
+  console.log('New client connected:', socket.id);
   socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id); // Change to console.log
+    console.log('Client disconnected:', socket.id);
   });
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Change to console.log
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

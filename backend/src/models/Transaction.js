@@ -53,6 +53,11 @@ const TransactionSchema = new mongoose.Schema({
     ref: 'User', 
     required: true 
   },
+  account: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+    required: false,
+  },
   splitTransactions: [{
     amount: { type: Number, required: true, min: 0 },
     category: { type: String, required: true },
@@ -64,6 +69,7 @@ const TransactionSchema = new mongoose.Schema({
 
 TransactionSchema.index({ user: 1, date: -1 });
 TransactionSchema.index({ type: 1, category: 1 });
+TransactionSchema.index({ user: 1, account: 1 });
 
 TransactionSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
