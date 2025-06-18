@@ -117,3 +117,30 @@ export const getAccountTransactions = async (req, res) => {
     sendResponse(res, 500, false, null, error.message);
   }
 };
+
+// Update account balance
+export const updateAccountBalance = async (req, res) => {
+  try {
+    const account = await Account.findById(req.params.id).where({ user: req.user.id });
+    if (!account) {
+      return sendResponse(res, 404, false, null, 'Account not found');
+    }
+
+    const transactions = await Transaction.find({ account: account._id });
+    let balance = 0;
+    transactions.forEach(tx => {
+      if (tx.type === 'income') {
+        balance += tx.amount;
+      } else if (['expense', 'transfer'].includes(tx.type)) {
+        balance -= tx.amount;
+      }
+    });
+
+    account.balance = balance;
+    await account.save();
+    sendResponse(res, 200, true, account, 'Account balance updated successfully');
+  } catch (error) {
+    console.error('Update account balance error:', error.message);
+    sendResponse(res, 500, false, null, error.message);
+  }
+};

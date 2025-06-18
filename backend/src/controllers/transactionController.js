@@ -1,25 +1,11 @@
 import Transaction from '../models/Transaction.js';
+import Account from '../models/Account.js';
 import cron from 'node-cron';
 import { write as createCsvStream } from 'fast-csv';
 import PDFDocument from 'pdfkit';
 import CurrencyConverter from 'currency-converter-lt';
 import { Readable } from 'stream';
 import { parse } from 'csv-parse';
-import winston from 'winston';
-
-// Setup Winston logger
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' }),
-    new winston.transports.Console()
-  ],
-});
 
 // Utility to convert currency to USD
 const convertToUSD = async (amount, fromCurrency) => {
@@ -28,7 +14,7 @@ const convertToUSD = async (amount, fromCurrency) => {
     const converter = new CurrencyConverter({ CLIENTKEY: process.env.CURRENCY_API_KEY });
     return await converter.from(fromCurrency).to('USD').amount(amount).convert();
   } catch (error) {
-    logger.error('Currency conversion error:', error.message);
+    console.error('Currency conversion error:', error.message);
     throw new Error(`Currency conversion failed: ${error.message}`);
   }
 };
@@ -38,10 +24,29 @@ const sendResponse = (res, status, success, data = null, message = '') => {
   res.status(status).json({ success, data, message });
 };
 
+// Update account balance based on transactions
+const updateAccountBalance = async (accountId) => {
+  try {
+    const transactions = await Transaction.find({ account: accountId });
+    let balance = 0;
+    transactions.forEach(tx => {
+      if (tx.type === 'income') {
+        balance += tx.amount;
+      } else if (['expense', 'transfer'].includes(tx.type)) {
+        balance -= tx.amount;
+      }
+    });
+    await Account.findByIdAndUpdate(accountId, { balance });
+    console.log(`Updated balance for account ${accountId}: ${balance}`);
+  } catch (error) {
+    console.error('Error updating account balance:', error.message);
+  }
+};
+
 // Add Transaction
 export const addTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, category, date, notes, tags, recurrence, currency = 'USD', splitTransactions } = req.body;
+    const { type, subType, amount, category, date, notes, tags, recurrence, currency = 'USD', splitTransactions, account } = req.body;
 
     const convertedAmount = await convertToUSD(amount, currency);
     const transaction = new Transaction({
@@ -57,12 +62,14 @@ export const addTransaction = async (req, res) => {
       tags,
       recurrence,
       splitTransactions: splitTransactions || [],
+      account,
     });
 
     await transaction.save();
+    if (account) await updateAccountBalance(account);
     sendResponse(res, 201, true, transaction, 'Transaction added successfully');
   } catch (error) {
-    logger.error('Add transaction error:', error.message);
+    console.error('Add transaction error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -90,7 +97,7 @@ export const getTransactions = async (req, res) => {
     const transactions = await Transaction.find(filter).sort(sort ? { [sort]: -1 } : { date: -1 }).limit(1000);
     sendResponse(res, 200, true, transactions);
   } catch (error) {
-    logger.error('Get transactions error:', error.message);
+    console.error('Get transactions error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -104,22 +111,24 @@ export const getTransactionById = async (req, res) => {
     }
     sendResponse(res, 200, true, transaction);
   } catch (error) {
-    logger.error('Get transaction by ID:', error.message);
-    sendResponse(res, error.message);
+    console.error('Get transaction by ID:', error.message);
+    sendResponse(res, 500, false, null, error.message);
   }
 };
 
 // Update Transaction
 export const updateTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, } = req.body;
-    const transaction = await Transaction.findById(req.params.id);
+    const { type, subType, amount, currency, category, notes, tags, recurrence, splitTransactions, account } = req.body;
+    const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
 
-    if (!transaction) return sendResponse(res, 'Transaction not found');
-    if (transaction.user.toString() !== req.user.id) return sendResponse(res, 'Not authorized');
+    if (!transaction) {
+      return sendResponse(res, 404, false, null, 'Transaction not found');
+    }
 
+    const oldAccount = transaction.account;
     const convertedAmount = currency && amount ? await convertToUSD(amount, currency) : transaction.amount;
-    Object.assign(transaction, transaction, {
+    Object.assign(transaction, {
       type: type || transaction.type,
       subType: subType || transaction.subType,
       amount: splitTransactions ? splitTransactions.reduce((sum, split) => sum + split.amount, 0) : convertedAmount,
@@ -130,13 +139,16 @@ export const updateTransaction = async (req, res) => {
       tags: tags || transaction.tags,
       recurrence: recurrence || transaction.recurrence,
       splitTransactions: splitTransactions || transaction.splitTransactions,
+      account: account || transaction.account,
     });
 
     await transaction.save();
-    sendResponse(res, true, transaction, 'Transaction updated successfully');
+    if (oldAccount) await updateAccountBalance(oldAccount);
+    if (account && account !== oldAccount) await updateAccountBalance(account);
+    sendResponse(res, 200, true, transaction, 'Transaction updated successfully');
   } catch (error) {
-    logger.error('Update transaction error:', error.message);
-    sendResponse(res, false, null, error.message);
+    console.error('Update transaction error:', error.message);
+    sendResponse(res, 500, false, null, error.message);
   }
 };
 
@@ -144,11 +156,15 @@ export const updateTransaction = async (req, res) => {
 export const deleteTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
-    if (!transaction) return sendResponse(res, 404, false, null, 'Transaction not found');
+    if (!transaction) {
+      return sendResponse(res, 404, false, null, 'Transaction not found');
+    }
+    const accountId = transaction.account;
     await transaction.deleteOne();
+    if (accountId) await updateAccountBalance(accountId);
     sendResponse(res, 200, true, null, 'Transaction deleted successfully');
   } catch (error) {
-    logger.error('Delete transaction error:', error.message);
+    console.error('Delete transaction error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -166,8 +182,12 @@ export const bulkUpdateTransactions = async (req, res) => {
       return sendResponse(res, 404, false, null, 'Some transactions not found or not authorized');
     }
 
+    const accountIds = transactions.map(t => t.account).filter(Boolean);
     if (action === 'delete') {
       await Transaction.deleteMany({ _id: { $in: transactionIds } });
+      for (const accountId of new Set(accountIds)) {
+        await updateAccountBalance(accountId);
+      }
       return sendResponse(res, 200, true, null, 'Transactions deleted successfully');
     }
 
@@ -179,10 +199,12 @@ export const bulkUpdateTransactions = async (req, res) => {
       { _id: { $in: transactionIds } },
       { $set: updates }
     );
-
+    for (const accountId of new Set(accountIds)) {
+      await updateAccountBalance(accountId);
+    }
     sendResponse(res, 200, true, null, 'Transactions updated successfully');
   } catch (error) {
-    logger.error('Bulk update error:', error.message);
+    console.error('Bulk update error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -222,13 +244,15 @@ export const handleRecurringTransactions = () => {
             date: now,
             notes: transaction.notes,
             tags: transaction.tags,
+            account: transaction.account,
           });
           await newTransaction.save();
+          if (transaction.account) await updateAccountBalance(transaction.account);
         }
       }
-      logger.info('Recurring transactions processed successfully');
+      console.log('Recurring transactions processed successfully');
     } catch (error) {
-      logger.error('Error in recurring transactions:', error.message);
+      console.error('Error in recurring transactions:', error.message);
     }
   });
 };
@@ -248,7 +272,7 @@ export const searchTransactions = async (req, res) => {
     const transactions = await Transaction.find(filters).sort({ date: -1 }).limit(1000);
     sendResponse(res, 200, true, transactions);
   } catch (error) {
-    logger.error('Search transactions error:', error.message);
+    console.error('Search transactions error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -257,27 +281,26 @@ export const searchTransactions = async (req, res) => {
 export const exportTransactions = async (req, res) => {
   try {
     if (!req.user?.id) {
-      logger.warn('Unauthorized access to export CSV: No user ID');
+      console.warn('Unauthorized access to export CSV: No user ID');
       return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
     }
 
-    logger.info(`Starting CSV export for user: ${req.user.id}`);
+    console.log(`Starting CSV export for user: ${req.user.id}`);
     res.set({
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename="transactions.csv"',
     });
 
-    // Fetch transactions
     const transactions = await Transaction.find({ user: req.user.id }).limit(1000).lean();
-    logger.info(`Fetched ${transactions.length} transactions for CSV export`);
+    console.log(`Fetched ${transactions.length} transactions for CSV export`);
 
     if (!Array.isArray(transactions)) {
-      logger.error('Transactions is not an array:', transactions);
+      console.error('Transactions is not an array:', transactions);
       return sendResponse(res, 500, false, null, 'Invalid transaction data');
     }
 
     if (transactions.length === 0) {
-      logger.info('No transactions found for CSV export');
+      console.log('No transactions found for CSV export');
       const csvStream = createCsvStream({ headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'] });
       csvStream.pipe(res);
       csvStream.end();
@@ -288,14 +311,13 @@ export const exportTransactions = async (req, res) => {
       headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'],
     });
 
-    // Process each transaction
     for (let i = 0; i < transactions.length; i++) {
       const t = transactions[i];
       try {
         if (!t || typeof t !== 'object') {
           throw new Error(`Invalid transaction at index ${i}`);
         }
-        logger.debug(`Processing transaction ${i + 1}: ${t._id}`);
+        console.log(`Processing transaction ${i + 1}: ${t._id}`);
         csvStream.write({
           type: t.type || '',
           amount: t.amount != null ? t.amount : 0,
@@ -305,22 +327,22 @@ export const exportTransactions = async (req, res) => {
           notes: t.notes || '',
         });
       } catch (error) {
-        logger.error(`Error processing transaction ${i + 1}: ${error.message}`);
+        console.error(`Error processing transaction ${i + 1}: ${error.message}`);
       }
     }
 
     csvStream
       .on('error', (error) => {
-        logger.error(`CSV stream error: ${error.message}`);
+        console.error(`CSV stream error: ${error.message}`);
       })
       .on('end', () => {
-        logger.info(`CSV export completed: ${transactions.length} transactions`);
+        console.log(`CSV export completed: ${transactions.length} transactions`);
       })
       .pipe(res);
 
     csvStream.end();
   } catch (error) {
-    logger.error(`Export CSV error: ${error.message}`);
+    console.error(`Export CSV error: ${error.message}`);
     if (!res.headersSent) {
       sendResponse(res, 500, false, null, `Failed to export CSV: ${error.message}`);
     }
@@ -356,21 +378,21 @@ export const exportTransactionsAsPDF = async (req, res) => {
         doc.moveDown();
       })
       .on('error', (error) => {
-        logger.error('PDF cursor error:', error.message);
+        console.error('PDF cursor error:', error.message);
         if (!res.headersSent) {
           sendResponse(res, 500, false, null, 'Failed to export PDF');
         }
       })
       .on('end', () => {
         doc.end();
-        logger.info('PDF export completed');
+        console.log('PDF export completed');
       });
 
     doc.on('error', (error) => {
-      logger.error('PDF document error:', error.message);
+        console.error('PDF document error:', error.message);
     });
   } catch (error) {
-    logger.error('Export PDF error:', error.message);
+    console.error('Export PDF error:', error.message);
     if (!res.headersSent) {
       sendResponse(res, 500, false, null, error.message);
     }
@@ -389,7 +411,7 @@ export const getBudgetStatus = async (req, res) => {
 
     sendResponse(res, 200, true, { totalExpenses, remainingBudget, budget });
   } catch (error) {
-    logger.error('Get budget status error:', error.message);
+    console.error('Get budget status error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -403,7 +425,7 @@ export const getTotalIncomeAndExpenses = async (req, res) => {
 
     sendResponse(res, 200, true, { totalIncome, totalExpenses });
   } catch (error) {
-    logger.error('Get income/expenses error:', error.message);
+    console.error('Get income/expenses error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -419,7 +441,7 @@ export const getIncomeVsExpensesReport = async (req, res) => {
 
     sendResponse(res, 200, true, report);
   } catch (error) {
-    logger.error('Get income vs expenses report error:', error.message);
+    console.error('Get income vs expenses report error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -435,7 +457,7 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
 
     sendResponse(res, 200, true, breakdown);
   } catch (error) {
-    logger.error('Get expense breakdown error:', error.message);
+    console.error('Get expense breakdown error:', error.message);
     sendResponse(res, 500, false, null, error.message);
   }
 };
@@ -448,11 +470,12 @@ export const importCSV = async (req, res) => {
     }
     const file = req.files.file;
     const transactions = [];
+    const accountIds = new Set();
     const stream = Readable.from(file.data.toString());
     stream
       .pipe(parse({ columns: true, trim: true }))
       .on('data', (row) => {
-        transactions.push({
+        const tx = {
           user: req.user.id,
           type: row.type,
           subType: row.subType || null,
@@ -464,6 +487,7 @@ export const importCSV = async (req, res) => {
           tags: row.tags ? row.tags.split(',') : [],
           recurrence: row.recurrence || null,
           date: new Date(row.date),
+          account: row.account || null,
           splitTransactions: row.splitTransactions
             ? JSON.parse(row.splitTransactions).map(s => ({
                 amount: parseFloat(s.amount),
@@ -471,23 +495,28 @@ export const importCSV = async (req, res) => {
                 notes: s.notes || '',
               }))
             : [],
-        });
+        };
+        transactions.push(tx);
+        if (tx.account) accountIds.add(tx.account);
       })
       .on('end', async () => {
         try {
           const savedTransactions = await Transaction.insertMany(transactions, { ordered: false });
+          for (const accountId of accountIds) {
+            await updateAccountBalance(accountId);
+          }
           sendResponse(res, 200, true, savedTransactions, 'Transactions imported successfully');
         } catch (error) {
-          logger.error('CSV import save error:', error.message);
+          console.error('CSV import save error:', error.message);
           sendResponse(res, 500, false, null, `Failed to save transactions: ${error.message}`);
         }
       })
       .on('error', (error) => {
-        logger.error('CSV parse error:', error.message);
+        console.error('CSV parse error:', error.message);
         sendResponse(res, 500, false, null, `Failed to parse CSV: ${error.message}`);
       });
   } catch (error) {
-    logger.error('Import CSV error:', error.message);
+    console.error('Import CSV error:', error.message);
     sendResponse(res, 500, false, null, `Failed to import transactions: ${error.message}`);
   }
 };
