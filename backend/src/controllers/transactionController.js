@@ -20,7 +20,7 @@ const convertToUSD = async (amount, fromCurrency) => {
 };
 
 // Standardized response helper
-const sendResponse = (res, status, success, data = null, message = '') => {
+const sendResponse = (res, status, success, data = {}, message = '') => {
   res.status(status).json({ success, data, message });
 };
 
@@ -67,17 +67,17 @@ export const addTransaction = async (req, res) => {
 
     await transaction.save();
     if (account) await updateAccountBalance(account);
-    sendResponse(res, 201, true, transaction, 'Transaction added successfully');
+    sendResponse(res, 201, true, { transaction }, 'Transaction added successfully');
   } catch (error) {
     console.error('Add transaction error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
 // Get Transactions
 export const getTransactions = async (req, res) => {
   try {
-    const { type, category, dateRange, query, sort } = req.query;
+    const { type, category, dateRange, query, sort, page = 1, limit = 10 } = req.query;
     const filter = { user: req.user.id };
 
     if (type) filter.type = type;
@@ -94,11 +94,15 @@ export const getTransactions = async (req, res) => {
       ];
     }
 
-    const transactions = await Transaction.find(filter).sort(sort ? { [sort]: -1 } : { date: -1 }).limit(1000);
-    sendResponse(res, 200, true, transactions);
+    const transactions = await Transaction.find(filter)
+      .sort(sort ? { [sort]: -1 } : { date: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+    const total = await Transaction.countDocuments(filter);
+    sendResponse(res, 200, true, { transactions, total });
   } catch (error) {
     console.error('Get transactions error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -107,12 +111,12 @@ export const getTransactionById = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
     if (!transaction) {
-      return sendResponse(res, 404, false, null, 'Transaction not found');
+      return sendResponse(res, 404, false, {}, 'Transaction not found');
     }
-    sendResponse(res, 200, true, transaction);
+    sendResponse(res, 200, true, { transaction });
   } catch (error) {
     console.error('Get transaction by ID:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -123,7 +127,7 @@ export const updateTransaction = async (req, res) => {
     const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
 
     if (!transaction) {
-      return sendResponse(res, 404, false, null, 'Transaction not found');
+      return sendResponse(res, 404, false, {}, 'Transaction not found');
     }
 
     const oldAccount = transaction.account;
@@ -145,10 +149,10 @@ export const updateTransaction = async (req, res) => {
     await transaction.save();
     if (oldAccount) await updateAccountBalance(oldAccount);
     if (account && account !== oldAccount) await updateAccountBalance(account);
-    sendResponse(res, 200, true, transaction, 'Transaction updated successfully');
+    sendResponse(res, 200, true, { transaction }, 'Transaction updated successfully');
   } catch (error) {
     console.error('Update transaction error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -157,15 +161,15 @@ export const deleteTransaction = async (req, res) => {
   try {
     const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
     if (!transaction) {
-      return sendResponse(res, 404, false, null, 'Transaction not found');
+      return sendResponse(res, 404, false, {}, 'Transaction not found');
     }
     const accountId = transaction.account;
     await transaction.deleteOne();
     if (accountId) await updateAccountBalance(accountId);
-    sendResponse(res, 200, true, null, 'Transaction deleted successfully');
+    sendResponse(res, 200, true, {}, 'Transaction deleted successfully');
   } catch (error) {
     console.error('Delete transaction error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -174,12 +178,12 @@ export const bulkUpdateTransactions = async (req, res) => {
   try {
     const { transactionIds, category, tags, action } = req.body;
     if (!transactionIds || !Array.isArray(transactionIds)) {
-      return sendResponse(res, 400, false, null, 'transactionIds must be an array');
+      return sendResponse(res, 400, false, {}, 'transactionIds must be an array');
     }
 
     const transactions = await Transaction.find({ _id: { $in: transactionIds }, user: req.user.id });
     if (transactions.length !== transactionIds.length) {
-      return sendResponse(res, 404, false, null, 'Some transactions not found or not authorized');
+      return sendResponse(res, 404, false, {}, 'Some transactions not found or not authorized');
     }
 
     const accountIds = transactions.map(t => t.account).filter(Boolean);
@@ -188,7 +192,7 @@ export const bulkUpdateTransactions = async (req, res) => {
       for (const accountId of new Set(accountIds)) {
         await updateAccountBalance(accountId);
       }
-      return sendResponse(res, 200, true, null, 'Transactions deleted successfully');
+      return sendResponse(res, 200, true, {}, 'Transactions deleted successfully');
     }
 
     const updates = {};
@@ -202,10 +206,10 @@ export const bulkUpdateTransactions = async (req, res) => {
     for (const accountId of new Set(accountIds)) {
       await updateAccountBalance(accountId);
     }
-    sendResponse(res, 200, true, null, 'Transactions updated successfully');
+    sendResponse(res, 200, true, {}, 'Transactions updated successfully');
   } catch (error) {
     console.error('Bulk update error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -260,7 +264,7 @@ export const handleRecurringTransactions = () => {
 // Search Transactions
 export const searchTransactions = async (req, res) => {
   try {
-    const { startDate, endDate, minAmount, maxAmount, category, type, tags } = req.query;
+    const { startDate, endDate, minAmount, maxAmount, category, type, tags, page = 1, limit = 10 } = req.query;
     const filters = { user: req.user.id };
 
     if (startDate || endDate) filters.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
@@ -269,11 +273,15 @@ export const searchTransactions = async (req, res) => {
     if (type) filters.type = type;
     if (tags) filters.tags = { $in: tags.split(',') };
 
-    const transactions = await Transaction.find(filters).sort({ date: -1 }).limit(1000);
-    sendResponse(res, 200, true, transactions);
+    const transactions = await Transaction.find(filters)
+      .sort({ date: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+    const total = await Transaction.countDocuments(filters);
+    sendResponse(res, 200, true, { transactions, total });
   } catch (error) {
     console.error('Search transactions error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -282,7 +290,7 @@ export const exportTransactions = async (req, res) => {
   try {
     if (!req.user?.id) {
       console.warn('Unauthorized access to export CSV: No user ID');
-      return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
+      return sendResponse(res, 401, false, {}, 'Unauthorized: Please log in');
     }
 
     console.log(`Starting CSV export for user: ${req.user.id}`);
@@ -296,19 +304,19 @@ export const exportTransactions = async (req, res) => {
 
     if (!Array.isArray(transactions)) {
       console.error('Transactions is not an array:', transactions);
-      return sendResponse(res, 500, false, null, 'Invalid transaction data');
+      return sendResponse(res, 500, false, {}, 'Invalid transaction data');
     }
 
     if (transactions.length === 0) {
       console.log('No transactions found for CSV export');
-      const csvStream = createCsvStream({ headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'] });
+      const csvStream = createCsvStream({ headers: ['type', 'amount', 'currency', 'category', 'date', 'notes', 'account'] });
       csvStream.pipe(res);
       csvStream.end();
       return;
     }
 
     const csvStream = createCsvStream({
-      headers: ['type', 'amount', 'currency', 'category', 'date', 'notes'],
+      headers: ['type', 'amount', 'currency', 'category', 'date', 'notes', 'account'],
     });
 
     for (let i = 0; i < transactions.length; i++) {
@@ -325,6 +333,7 @@ export const exportTransactions = async (req, res) => {
           category: t.category || '',
           date: t.date ? new Date(t.date).toLocaleDateString() : '',
           notes: t.notes || '',
+          account: t.account || '',
         });
       } catch (error) {
         console.error(`Error processing transaction ${i + 1}: ${error.message}`);
@@ -344,7 +353,7 @@ export const exportTransactions = async (req, res) => {
   } catch (error) {
     console.error(`Export CSV error: ${error.message}`);
     if (!res.headersSent) {
-      sendResponse(res, 500, false, null, `Failed to export CSV: ${error.message}`);
+      sendResponse(res, 500, false, {}, `Failed to export CSV: ${error.message}`);
     }
   }
 };
@@ -375,12 +384,13 @@ export const exportTransactionsAsPDF = async (req, res) => {
         doc.text(`Category: ${t.category || '-'}`);
         doc.text(`Date: ${new Date(t.date).toLocaleDateString()}`);
         doc.text(`Notes: ${t.notes || '-'}`);
+        doc.text(`Account: ${t.account || '-'}`);
         doc.moveDown();
       })
       .on('error', (error) => {
         console.error('PDF cursor error:', error.message);
         if (!res.headersSent) {
-          sendResponse(res, 500, false, null, 'Failed to export PDF');
+          sendResponse(res, 500, false, {}, 'Failed to export PDF');
         }
       })
       .on('end', () => {
@@ -389,12 +399,12 @@ export const exportTransactionsAsPDF = async (req, res) => {
       });
 
     doc.on('error', (error) => {
-        console.error('PDF document error:', error.message);
+      console.error('PDF document error:', error.message);
     });
   } catch (error) {
     console.error('Export PDF error:', error.message);
     if (!res.headersSent) {
-      sendResponse(res, 500, false, null, error.message);
+      sendResponse(res, 500, false, {}, error.message);
     }
   }
 };
@@ -403,7 +413,7 @@ export const exportTransactionsAsPDF = async (req, res) => {
 export const getBudgetStatus = async (req, res) => {
   try {
     const { budget } = req.query;
-    if (!budget) return sendResponse(res, 400, false, null, 'Budget parameter is required');
+    if (!budget) return sendResponse(res, 400, false, {}, 'Budget parameter is required');
 
     const transactions = await Transaction.find({ user: req.user.id, type: 'expense' }).limit(1000);
     const totalExpenses = transactions.reduce((acc, curr) => acc + curr.amount, 0);
@@ -412,7 +422,7 @@ export const getBudgetStatus = async (req, res) => {
     sendResponse(res, 200, true, { totalExpenses, remainingBudget, budget });
   } catch (error) {
     console.error('Get budget status error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -426,7 +436,7 @@ export const getTotalIncomeAndExpenses = async (req, res) => {
     sendResponse(res, 200, true, { totalIncome, totalExpenses });
   } catch (error) {
     console.error('Get income/expenses error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -439,10 +449,10 @@ export const getIncomeVsExpensesReport = async (req, res) => {
       expenses: transactions.filter(t => t.type === 'expense').map(t => ({ date: t.date, amount: t.amount, category: t.category })),
     };
 
-    sendResponse(res, 200, true, report);
+    sendResponse(res, 200, true, { report });
   } catch (error) {
     console.error('Get income vs expenses report error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -455,10 +465,10 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
       return acc;
     }, {});
 
-    sendResponse(res, 200, true, breakdown);
+    sendResponse(res, 200, true, { breakdown });
   } catch (error) {
     console.error('Get expense breakdown error:', error.message);
-    sendResponse(res, 500, false, null, error.message);
+    sendResponse(res, 500, false, {}, error.message);
   }
 };
 
@@ -466,7 +476,7 @@ export const getCategoricalExpenseBreakdown = async (req, res) => {
 export const importCSV = async (req, res) => {
   try {
     if (!req.files || !req.files.file) {
-      return sendResponse(res, 400, false, null, 'No file uploaded');
+      return sendResponse(res, 400, false, {}, 'No file uploaded');
     }
     const file = req.files.file;
     const transactions = [];
@@ -505,18 +515,18 @@ export const importCSV = async (req, res) => {
           for (const accountId of accountIds) {
             await updateAccountBalance(accountId);
           }
-          sendResponse(res, 200, true, savedTransactions, 'Transactions imported successfully');
+          sendResponse(res, 200, true, { transactions: savedTransactions }, 'Transactions imported successfully');
         } catch (error) {
           console.error('CSV import save error:', error.message);
-          sendResponse(res, 500, false, null, `Failed to save transactions: ${error.message}`);
+          sendResponse(res, 500, false, {}, `Failed to save transactions: ${error.message}`);
         }
       })
       .on('error', (error) => {
         console.error('CSV parse error:', error.message);
-        sendResponse(res, 500, false, null, `Failed to parse CSV: ${error.message}`);
+        sendResponse(res, 500, false, {}, `Failed to parse CSV: ${error.message}`);
       });
   } catch (error) {
     console.error('Import CSV error:', error.message);
-    sendResponse(res, 500, false, null, `Failed to import transactions: ${error.message}`);
+    sendResponse(res, 500, false, {}, `Failed to import transactions: ${error.message}`);
   }
 };

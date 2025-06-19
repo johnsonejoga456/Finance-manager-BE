@@ -21,11 +21,18 @@ const AccountSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0,
+    validate: {
+      validator: function(v) {
+        return this.type === 'savings' || this.type === 'checking' ? v >= 0 : true;
+      },
+      message: 'Balance cannot be negative for savings or checking accounts',
+    },
   },
   currency: {
     type: String,
-    default: 'USD',
     required: true,
+    default: 'USD',
+    enum: ['USD', 'EUR', 'GBP'],
   },
   institution: {
     type: String,
