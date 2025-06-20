@@ -15,6 +15,7 @@ import dashboardRouter from './src/routes/dashboardRoutes.js';
 import goalRouter from './src/routes/goalRoutes.js';
 import debtRouter from './src/routes/debtRoutes.js';
 import accountRouter from './src/routes/accountRoutes.js';
+import investementRouter from './src/routes/investmentRoutes.js';
 import fileUpload from 'express-fileupload';
 
 dotenv.config();
@@ -73,6 +74,7 @@ app.use('/api/transactions', transactionRouter);
 app.use('/api/budgets', budgetRouter);
 app.use('/api/debts', debtRouter);
 app.use('/api/accounts', accountRouter);
+app.use('/api/investments', investementRouter);
 app.use('/api/notifications', notificationRouter);
 
 // Error handling middleware
