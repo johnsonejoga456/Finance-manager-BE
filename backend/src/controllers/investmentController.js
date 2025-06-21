@@ -1,6 +1,6 @@
 import Investment from '../models/Investment.js';
 import { Parser } from 'json2csv';
-import PDFDocument from './pdfkit';
+import PDFDocument from 'pdfkit';
 import asyncHandler from 'express-async-handler';
 
 // Get all investments with pagination
@@ -10,7 +10,7 @@ const getInvestments = asyncHandler(async (req, res) => {
 
   const investments = await Investment.find({ userId })
     .skip((page - 1) * parseInt(limit))
-    .parseInt(limit)
+    .limit(parseInt(limit))
     .sort({ purchaseDate: -1 });
 
   const total = await Investment.countDocuments({ userId });
@@ -33,7 +33,7 @@ const addInvestment = asyncHandler(async (req, res) => {
     type: type,
     initialInvestment: parseFloat(initialInvestment),
     currentValue: parseFloat(currentValue),
-    currency: currencyType,
+    currency: currencyType, // Note: Using currencyType to match frontend form
     institution: institution,
     purchaseDate: purchaseDate,
     notes: notes,
