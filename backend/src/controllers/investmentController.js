@@ -20,10 +20,10 @@ const getInvestments = asyncHandler(async (req, res) => {
 
 // Add a new investment
 const addInvestment = asyncHandler(async (req, res) => {
-  const { name, type, initialInvestment, currentValue, currency, currencyType, institution, purchaseDate, notes } = req.body;
+  const { name, type, initialInvestment, currentValue, currency, institution, purchaseDate, notes } = req.body;
   const userId = req.user._id;
 
-  if (!name || !type || !initialInvestment || !currentValue || !currencyType || !purchaseDate) {
+  if (!name || !type || !initialInvestment || !currentValue || !currency || !purchaseDate) {
     res.status(400);
     throw new Error('All required fields must be provided');
   }
@@ -33,7 +33,7 @@ const addInvestment = asyncHandler(async (req, res) => {
     type: type,
     initialInvestment: parseFloat(initialInvestment),
     currentValue: parseFloat(currentValue),
-    currency: currencyType, // Note: Using currencyType to match frontend form
+    currency: currency,
     institution: institution,
     purchaseDate: purchaseDate,
     notes: notes,

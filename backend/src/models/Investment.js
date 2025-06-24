@@ -9,7 +9,7 @@ const investmentSchema = new mongoose.Schema({
   institution: { type: String },
   purchaseDate: { type: Date, required: true },
   notes: { type: String },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Assuming user auth
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 }, { timestamps: true });
 
 export default mongoose.model('Investment', investmentSchema);
