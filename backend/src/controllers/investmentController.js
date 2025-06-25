@@ -62,6 +62,7 @@ const addInvestment = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Update an investment
 // @route   PUT /api/investments/:id
 // @access  Private
