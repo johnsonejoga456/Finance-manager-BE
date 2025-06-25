@@ -1,15 +1,46 @@
 import mongoose from 'mongoose';
 
 const investmentSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  type: { type: String, required: true, enum: ['stock', 'bond', 'mutual fund', 'ETF', 'real estate', 'crypto'] },
-  initialInvestment: { type: Number, required: true, min: 0 },
-  currentValue: { type: Number, required: true, min: 0 },
-  currency: { type: String, required: true, default: 'USD' },
-  institution: { type: String },
-  purchaseDate: { type: Date, required: true },
-  notes: { type: String },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-}, { timestamps: true });
+  name: {
+    type: String,
+    required: true,
+  },
+  type: {
+    type: String,
+    required: true,
+  },
+  initialInvestment: {
+    type: Number,
+    required: true,
+  },
+  currentValue: {
+    type: Number,
+    required: true,
+  },
+  currency: {
+    type: String,
+    required: true,
+  },
+  institution: {
+    type: String,
+    default: '',
+  },
+  purchaseDate: {
+    type: Date,
+    required: true,
+  },
+  notes: {
+    type: String,
+    default: '',
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
+}, {
+  timestamps: true
+});
 
-export default mongoose.model('Investment', investmentSchema);
+const Investment = mongoose.model('Investment', investmentSchema);
+export default Investment;

@@ -3,7 +3,9 @@ import { Parser } from 'json2csv';
 import PDFDocument from 'pdfkit';
 import asyncHandler from 'express-async-handler';
 
-// Get all investments with pagination
+// @desc    Get all investments with pagination
+// @route   GET /api/investments
+// @access  Private
 const getInvestments = asyncHandler(async (req, res) => {
   const { page = '1', limit = 10 } = req.query;
   const userId = req.user._id;
@@ -18,35 +20,63 @@ const getInvestments = asyncHandler(async (req, res) => {
   res.json({ investments, total });
 });
 
-// Add a new investment
+// @desc    Add a new investment
+// @route   POST /api/investments
+// @access  Private
 const addInvestment = asyncHandler(async (req, res) => {
-  const { name, type, initialInvestment, currentValue, currency, institution, purchaseDate, notes } = req.body;
-  const userId = req.user._id;
+  try {
+    const {
+      name,
+      type,
+      initialInvestment,
+      currentValue,
+      currency,
+      institution,
+      purchaseDate,
+      notes
+    } = req.body;
 
-  if (!name || !type || !initialInvestment || !currentValue || !currency || !purchaseDate) {
-    res.status(400);
-    throw new Error('All required fields must be provided');
+    const userId = req.user._id;
+
+    if (!name || !type || !initialInvestment || !currentValue || !currency || !purchaseDate) {
+      res.status(400);
+      throw new Error('All required fields must be provided');
+    }
+
+    const investment = await Investment.create({
+      name,
+      type,
+      initialInvestment: parseFloat(initialInvestment),
+      currentValue: parseFloat(currentValue),
+      currency,
+      institution,
+      purchaseDate,
+      notes,
+      userId,
+    });
+
+    res.status(201).json(investment);
+  } catch (error) {
+    console.error('Error adding investment:', error.message);
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
-
-  const investment = await Investment.create({
-    name: name,
-    type: type,
-    initialInvestment: parseFloat(initialInvestment),
-    currentValue: parseFloat(currentValue),
-    currency: currency,
-    institution: institution,
-    purchaseDate: purchaseDate,
-    notes: notes,
-    userId: userId,
-  });
-
-  res.status(201).json(investment);
 });
 
-// Update an investment
+// @desc    Update an investment
+// @route   PUT /api/investments/:id
+// @access  Private
 const updateInvestment = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, type, initialInvestment, currentValue, currency, institution, purchaseDate, notes } = req.body;
+  const {
+    name,
+    type,
+    initialInvestment,
+    currentValue,
+    currency,
+    institution,
+    purchaseDate,
+    notes
+  } = req.body;
   const userId = req.user._id;
 
   const investment = await Investment.findOne({ _id: id, userId });
@@ -70,7 +100,9 @@ const updateInvestment = asyncHandler(async (req, res) => {
   res.json(investment);
 });
 
-// Delete an investment
+// @desc    Delete an investment
+// @route   DELETE /api/investments/:id
+// @access  Private
 const deleteInvestment = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
@@ -87,12 +119,24 @@ const deleteInvestment = asyncHandler(async (req, res) => {
   res.json({ message: 'Investment deleted' });
 });
 
-// Export investments to CSV
+// @desc    Export investments to CSV
+// @route   GET /api/investments/export/csv
+// @access  Private
 const exportToCSV = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const investments = await Investment.find({ userId });
 
-  const fields = ['name', 'type', 'initialInvestment', 'currentValue', 'currency', 'institution', 'purchaseDate', 'notes'];
+  const fields = [
+    'name',
+    'type',
+    'initialInvestment',
+    'currentValue',
+    'currency',
+    'institution',
+    'purchaseDate',
+    'notes'
+  ];
+
   const parser = new Parser({ fields });
   const csv = parser.parse(investments);
 
@@ -101,13 +145,16 @@ const exportToCSV = asyncHandler(async (req, res) => {
   res.send(csv);
 });
 
-// Export investments to PDF
+// @desc    Export investments to PDF
+// @route   GET /api/investments/export/pdf
+// @access  Private
 const exportToPDF = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const investments = await Investment.find({ userId });
 
   const doc = new PDFDocument();
   let buffers = [];
+
   doc.on('data', buffers.push.bind(buffers));
   doc.on('end', () => {
     const pdfData = Buffer.concat(buffers);
@@ -124,7 +171,11 @@ const exportToPDF = asyncHandler(async (req, res) => {
     doc.text(`Type: ${inv.type}`);
     doc.text(`Initial Investment: $${inv.initialInvestment.toFixed(2)}`);
     doc.text(`Current Value: $${inv.currentValue.toFixed(2)}`);
-    doc.text(`Return: ${inv.initialInvestment > 0 ? (((inv.currentValue - inv.initialInvestment) / inv.initialInvestment) * 100).toFixed(2) : '0.00'}%`);
+    doc.text(`Return: ${
+      inv.initialInvestment > 0
+        ? (((inv.currentValue - inv.initialInvestment) / inv.initialInvestment) * 100).toFixed(2)
+        : '0.00'
+    }%`);
     doc.text(`Currency: ${inv.currency}`);
     doc.text(`Institution: ${inv.institution || '-'}`);
     doc.text(`Purchase Date: ${new Date(inv.purchaseDate).toLocaleDateString()}`);
@@ -135,4 +186,11 @@ const exportToPDF = asyncHandler(async (req, res) => {
   doc.end();
 });
 
-export { getInvestments, addInvestment, updateInvestment, deleteInvestment, exportToCSV, exportToPDF };
+export {
+  getInvestments,
+  addInvestment,
+  updateInvestment,
+  deleteInvestment,
+  exportToCSV,
+  exportToPDF
+};
