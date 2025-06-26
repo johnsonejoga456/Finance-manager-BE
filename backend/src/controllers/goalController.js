@@ -9,7 +9,7 @@ export const createGoal = async (req, res) => {
       title,
       description,
       targetAmount,
-      currency: currency || "USD", // Default to USD
+      currency: currency || "USD",
       deadline,
       category,
       milestones,
@@ -94,7 +94,7 @@ export const updateGoalProgress = async (req, res) => {
 export const updateMilestones = async (req, res) => {
   try {
     const { id } = req.params;
-    const { milestones } = req.body; // Expect array of { amount: Number }
+    const { milestones } = req.body;
     const goal = await Goal.findOneAndUpdate(
       { _id: id, user: req.user.id },
       { milestones },

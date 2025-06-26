@@ -3,9 +3,6 @@ import { Parser } from 'json2csv';
 import PDFDocument from 'pdfkit';
 import asyncHandler from 'express-async-handler';
 
-// @desc    Get all investments with pagination
-// @route   GET /api/investments
-// @access  Private
 const getInvestments = asyncHandler(async (req, res) => {
   const { page = '1', limit = 10 } = req.query;
   const userId = req.user._id;
@@ -20,9 +17,7 @@ const getInvestments = asyncHandler(async (req, res) => {
   res.json({ investments, total });
 });
 
-// @desc    Add a new investment
-// @route   POST /api/investments
-// @access  Private
+
 const addInvestment = asyncHandler(async (req, res) => {
   try {
     const {
@@ -63,9 +58,6 @@ const addInvestment = asyncHandler(async (req, res) => {
 });
 
 
-// @desc    Update an investment
-// @route   PUT /api/investments/:id
-// @access  Private
 const updateInvestment = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const {
@@ -101,9 +93,6 @@ const updateInvestment = asyncHandler(async (req, res) => {
   res.json(investment);
 });
 
-// @desc    Delete an investment
-// @route   DELETE /api/investments/:id
-// @access  Private
 const deleteInvestment = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const userId = req.user._id;
@@ -120,9 +109,7 @@ const deleteInvestment = asyncHandler(async (req, res) => {
   res.json({ message: 'Investment deleted' });
 });
 
-// @desc    Export investments to CSV
-// @route   GET /api/investments/export/csv
-// @access  Private
+
 const exportToCSV = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const investments = await Investment.find({ userId });
@@ -146,9 +133,7 @@ const exportToCSV = asyncHandler(async (req, res) => {
   res.send(csv);
 });
 
-// @desc    Export investments to PDF
-// @route   GET /api/investments/export/pdf
-// @access  Private
+
 const exportToPDF = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const investments = await Investment.find({ userId });

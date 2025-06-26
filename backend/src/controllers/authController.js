@@ -103,15 +103,15 @@ export const forgotPassword = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: process.env.EMAIL, // my email
-                pass: process.env.EMAIL_PASSWORD, // my email password
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
 
         await transporter.sendMail({
-            from: `"JayFirm" <${process.env.EMAIL}>`, // Custome name + ender email
+            from: `"JayFirm" <${process.env.EMAIL}>`,
             to: email,
             subject: 'Password Reset Request',
             text: `Click the following link to reset your password: ${resetUrl}`,
