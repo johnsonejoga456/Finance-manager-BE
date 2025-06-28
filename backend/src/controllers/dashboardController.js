@@ -1,68 +1,78 @@
-// Corrected `dashboardController.js`
-import Transaction from "../models/Transaction.js";
-import Budget from "../models/Budget.js";
-import User from "../models/User.js";
+// controllers/dashboardController.js
 
-// Updated dashboard data
-export const getDashboardData = async (req, res) => {
-  try {
-    const userId = req.user.id;
+import asyncHandler from 'express-async-handler';
+import Account from '../models/Account.js';
+import Transaction from '../models/Transaction.js';
+import Budget from '../models/Budget.js';
+import Goal from '../models/Goals.js';
+import Debt from '../models/Debt.js';
+import Investment from '../models/Investment.js';
 
-    // Fetch transactions
-    const transactions = await Transaction.find({ user: userId });
+export const getDashboardSummary = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
 
-    // Total income and expenses
-    const totalIncome = transactions
-      .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
-    const totalExpenses = transactions
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
+    // Accounts summary
+    const accounts = await Account.find({ userId });
+    const totalBalance = accounts.reduce((sum, acc) => sum + (acc.balance || 0), 0);
+    const topAccounts = accounts
+        .sort((a, b) => (b.balance || 0) - (a.balance || 0))
+        .slice(0, 3);
 
-    // Net balance
-    const netBalance = totalIncome - totalExpenses;
+    // Transactions summary
+    const recentTransactions = await Transaction.find({ userId })
+        .sort({ date: -1 })
+        .limit(5);
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const totalSpentThisMonth = await Transaction.aggregate([
+        { $match: { userId, type: 'expense', date: { $gte: startOfMonth } } },
+        { $group: { _id: null, total: { $sum: '$amount' } } },
+    ]);
 
-    // Categorical expense breakdown
-    const categoryBreakdown = transactions
-      .filter((t) => t.type === 'expense')
-      .reduce((acc, t) => {
-        acc[t.category] = (acc[t.category] || 0) + t.amount;
-        return acc;
-      }, {});
+    // Budgets summary
+    const activeBudgets = await Budget.find({ userId });
+    const overBudget = activeBudgets.some(budget => budget.spent > budget.limit);
 
-    // Recurring transactions
-    const recurringTransactions = transactions.filter((t) => t.recurrence);
+    // Goals summary
+    const activeGoals = await Goal.find({ userId }).limit(3);
 
-    // Budget usage
-    const budgets = await Budget.find({ user: userId });
-    const budgetSummary = budgets.map((b) => ({
-      category: b.category,
-      budget: b.amount,
-      spent: transactions
-        .filter((t) => t.category === b.category && t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0),
-    }));
+    // Debts summary
+    const debts = await Debt.find({ userId });
+    const totalDebt = debts.reduce((sum, debt) => sum + (debt.amountRemaining || 0), 0);
+    const nextPayment = debts
+        .flatMap(debt => debt.payments || [])
+        .filter(payment => new Date(payment.dueDate) >= new Date())
+        .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))[0] || null;
 
-    const user = await User.findById(userId);
+    // Investments summary
+    const investments = await Investment.find({ userId });
+    const totalInvestmentValue = investments.reduce((sum, inv) => sum + (inv.currentValue || 0), 0);
+    const topInvestments = investments
+        .sort((a, b) => (b.currentValue || 0) - (a.currentValue || 0))
+        .slice(0, 3);
 
-    // Response
-    res.status(200).json({
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      },
-      summary: {
-        totalIncome,
-        totalExpenses,
-        netBalance,
-      },
-      categoryBreakdown,
-      recurringTransactions,
-      budgetSummary,
+    res.json({
+        accounts: {
+            totalBalance,
+            topAccounts,
+        },
+        transactions: {
+            recent: recentTransactions,
+            totalSpentThisMonth: totalSpentThisMonth[0]?.total || 0,
+        },
+        budgets: {
+            activeBudgets,
+            overBudget,
+        },
+        goals: {
+            activeGoals,
+        },
+        debts: {
+            totalDebt,
+            nextPayment,
+        },
+        investments: {
+            totalValue: totalInvestmentValue,
+            topInvestments,
+        },
     });
-  } catch (error) {
-    console.error('Error fetching dashboard data:', error);
-    res.status(500).json({ message: 'Failed to fetch dashboard data' });
-  }
-};
+});
