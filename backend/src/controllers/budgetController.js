@@ -27,7 +27,7 @@ export const createBudget = async (req, res) => {
     }
 
     const budget = new Budget({
-      user: req.user.id,
+      user: req.user._id, // Use _id to attach user
       category,
       amount,
       currency: currency || 'USD',
@@ -42,7 +42,7 @@ export const createBudget = async (req, res) => {
     });
 
     await budget.save();
-    console.log(`Budget created: ${budget._id} for user ${req.user.id}`);
+    console.log(`Budget created: ${budget._id} for user ${req.user._id}`);
     sendResponse(res, 201, true, budget, 'Budget created successfully');
   } catch (error) {
     console.error('Create budget error:', error.message);
@@ -53,7 +53,7 @@ export const createBudget = async (req, res) => {
 // Get all budgets for the user
 export const getBudgets = async (req, res) => {
   try {
-    const budgets = await Budget.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const budgets = await Budget.find({ user: req.user._id }).sort({ createdAt: -1 });
     sendResponse(res, 200, true, budgets, 'Budgets retrieved successfully');
   } catch (error) {
     console.error('Get budgets error:', error.message);
@@ -100,7 +100,7 @@ export const updateBudget = async (req, res) => {
     budget.alertThreshold = alertThreshold !== undefined ? alertThreshold : budget.alertThreshold;
 
     await budget.save();
-    console.log(`Budget updated: ${budget._id} for user ${req.user.id}`);
+    console.log(`Budget updated: ${budget._id} for user ${req.user._id}`);
     sendResponse(res, 200, true, budget, 'Budget updated successfully');
   } catch (error) {
     console.error('Update budget error:', error.message);
@@ -112,7 +112,7 @@ export const updateBudget = async (req, res) => {
 export const deleteBudget = async (req, res) => {
   try {
     await req.budget.deleteOne();
-    console.log(`Budget deleted: ${req.budget._id} for user ${req.user.id}`);
+    console.log(`Budget deleted: ${req.budget._id} for user ${req.user._id}`);
     sendResponse(res, 200, true, null, 'Budget deleted successfully');
   } catch (error) {
     console.error('Delete budget error:', error.message);
@@ -123,7 +123,7 @@ export const deleteBudget = async (req, res) => {
 // Get budget status (spending tracking)
 export const getBudgetStatus = async (req, res) => {
   try {
-    const budgets = await Budget.find({ user: req.user.id });
+    const budgets = await Budget.find({ user: req.user._id });
     if (!budgets.length) {
       return sendResponse(res, 200, true, [], 'No budgets found');
     }
@@ -131,7 +131,7 @@ export const getBudgetStatus = async (req, res) => {
     const status = await Promise.all(budgets.map(async (budget) => {
       const { startDate, endDate } = getPeriodDates(budget.period, budget.customPeriod);
       const transactions = await Transaction.find({
-        user: req.user.id,
+        user: req.user._id,
         type: 'expense',
         category: budget.category,
         date: { $gte: startDate, $lte: endDate },
@@ -168,7 +168,7 @@ export const getBudgetStatus = async (req, res) => {
 // Get budget insights (for visualizations)
 export const getBudgetInsights = async (req, res) => {
   try {
-    const budgets = await Budget.find({ user: req.user.id });
+    const budgets = await Budget.find({ user: req.user._id });
     if (!budgets.length) {
       return sendResponse(res, 200, true, { categories: [], spending: [] }, 'No budgets found');
     }
@@ -176,7 +176,7 @@ export const getBudgetInsights = async (req, res) => {
     const insights = await Promise.all(budgets.map(async (budget) => {
       const { startDate, endDate } = getPeriodDates(budget.period, budget.customPeriod);
       const transactions = await Transaction.find({
-        user: req.user.id,
+        user: req.user._id,
         type: 'expense',
         category: budget.category,
         date: { $gte: startDate, $lte: endDate },
@@ -264,13 +264,13 @@ export const exportBudgets = async (req, res) => {
       return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
     }
 
-    console.log(`Starting CSV export for user: ${req.user.id}`);
+    console.log(`Starting CSV export for user: ${req.user._id}`);
     res.set({
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename="budgets.csv"',
     });
 
-    const cursor = Budget.find({ user: req.user.id }).cursor();
+    const cursor = Budget.find({ user: req.user._id }).cursor();
     const csvStream = createCsvStream({
       headers: ['category', 'amount', 'currency', 'period', 'startDate', 'endDate', 'recurrence', 'rollover', 'alertThreshold'],
     });
@@ -322,7 +322,7 @@ export const exportBudgetsAsPDF = async (req, res) => {
       return sendResponse(res, 401, false, null, 'Unauthorized: Please log in');
     }
 
-    console.log(`Starting PDF export for user: ${req.user.id}`);
+    console.log(`Starting PDF export for user: ${req.user._id}`);
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'attachment; filename="budgets.pdf"',
@@ -334,7 +334,7 @@ export const exportBudgetsAsPDF = async (req, res) => {
     doc.fontSize(16).text('Budget Report', { align: 'center' });
     doc.moveDown();
 
-    const budgets = await Budget.find({ user: req.user.id });
+    const budgets = await Budget.find({ user: req.user._id });
     let yPosition = doc.y;
 
     budgets.forEach((b, index) => {

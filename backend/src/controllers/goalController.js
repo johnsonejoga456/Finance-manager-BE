@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Goal from "../models/Goals.js";
 
 // Create a new goal
@@ -5,7 +6,7 @@ export const createGoal = async (req, res) => {
   try {
     const { title, description, targetAmount, currency, deadline, category, milestones } = req.body;
     const goal = new Goal({
-      user: req.user.id,
+      user: req.user._id, // Use _id to attach user
       title,
       description,
       targetAmount,
@@ -26,7 +27,7 @@ export const createGoal = async (req, res) => {
 export const getGoals = async (req, res) => {
   try {
     const { status, sortBy } = req.query;
-    let query = { user: req.user.id };
+    let query = { user: req.user._id }; // Use _id for user query
     if (status) query.status = status;
 
     let sortOption = {};
@@ -45,7 +46,7 @@ export const markGoalAsComplete = async (req, res) => {
   try {
     const { id } = req.params;
     console.log("Marking goal as complete - Goal ID:", id);
-    console.log("User ID from auth:", req.user.id);
+    console.log("User ID from auth:", req.user._id);
 
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -53,9 +54,9 @@ export const markGoalAsComplete = async (req, res) => {
       return res.status(400).json({ message: "Invalid goal ID" });
     }
 
-    const goal = await Goal.findOne({ _id: id, user: req.user.id });
+    const goal = await Goal.findOne({ _id: id, user: req.user._id }); // Use _id for user query
     if (!goal) {
-      console.log("Goal not found or user mismatch:", { id, user: req.user.id });
+      console.log("Goal not found or user mismatch:", { id, user: req.user._id });
       return res.status(404).json({ message: "Goal not found or not authorized" });
     }
 
@@ -79,7 +80,7 @@ export const updateGoalProgress = async (req, res) => {
     const { id } = req.params;
     const { currentAmount } = req.body;
     const goal = await Goal.findOneAndUpdate(
-      { _id: id, user: req.user.id },
+      { _id: id, user: req.user._id }, // Use _id for user query
       { currentAmount },
       { new: true }
     );
@@ -96,7 +97,7 @@ export const updateMilestones = async (req, res) => {
     const { id } = req.params;
     const { milestones } = req.body;
     const goal = await Goal.findOneAndUpdate(
-      { _id: id, user: req.user.id },
+      { _id: id, user: req.user._id }, // Use _id for user query
       { milestones },
       { new: true }
     );
@@ -110,7 +111,7 @@ export const updateMilestones = async (req, res) => {
 // Get notifications
 export const getNotifications = async (req, res) => {
   try {
-    const goals = await Goal.find({ user: req.user.id });
+    const goals = await Goal.find({ user: req.user._id }); // Use _id for user query
     const notifications = goals.reduce((acc, goal) => {
       const daysLeft = Math.ceil((new Date(goal.deadline) - new Date()) / (1000 * 60 * 60 * 24));
       if (daysLeft <= 7 && daysLeft > 0 && goal.status === "in-progress") {
@@ -136,7 +137,7 @@ export const getNotifications = async (req, res) => {
 export const deleteGoal = async (req, res) => {
   try {
     const { id } = req.params;
-    const goal = await Goal.findOneAndDelete({ _id: id, user: req.user.id });
+    const goal = await Goal.findOneAndDelete({ _id: id, user: req.user._id }); // Use _id for user query
     if (!goal) return res.status(404).json({ message: "Goal not found" });
     res.status(200).json({ message: "Goal deleted successfully" });
   } catch (error) {

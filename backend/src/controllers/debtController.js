@@ -23,18 +23,18 @@ export const createDebt = async (req, res) => {
     }
 
     const debt = new Debt({
-      user: req.user.id,
+      user: req.user._id, // Use _id to attach user
       description,
       creditor,
       balance: parsedBalance,
-      initialBalance: parsedBalance, // Ensure initialBalance is set
+      initialBalance: parsedBalance,
       interestRate: parseFloat(interestRate),
       minimumPayment: parseFloat(minimumPayment),
       dueDate: new Date(dueDate),
     });
 
     await debt.save();
-    console.log(`Debt created: ${debt._id} for user ${req.user.id}, initialBalance=${debt.initialBalance}`);
+    console.log(`Debt created: ${debt._id} for user ${req.user._id}, initialBalance=${debt.initialBalance}`);
     sendResponse(res, 201, true, debt, 'Debt created successfully');
   } catch (error) {
     console.error('Create debt error:', error.message);
@@ -45,7 +45,7 @@ export const createDebt = async (req, res) => {
 // Get all debts for the user
 export const getDebts = async (req, res) => {
   try {
-    const debts = await Debt.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const debts = await Debt.find({ user: req.user._id }).sort({ createdAt: -1 }); // Use _id to attach user
     sendResponse(res, 200, true, debts, 'Debts retrieved successfully');
   } catch (error) {
     console.error('Get debts error:', error.message);
@@ -82,7 +82,7 @@ export const updateDebt = async (req, res) => {
     }
 
     await debt.save();
-    console.log(`Debt updated: ${debt._id} for user ${req.user.id}, initialBalance=${debt.initialBalance}`);
+    console.log(`Debt updated: ${debt._id} for user ${req.user._id}, initialBalance=${debt.initialBalance}`);
     sendResponse(res, 200, true, debt, 'Debt saved successfully');
   } catch (error) {
     console.error('Update debt error:', error.message);
@@ -94,7 +94,7 @@ export const updateDebt = async (req, res) => {
 export const deleteDebt = async (req, res) => {
   try {
     await req.debt.deleteOne();
-    console.log(`Debt deleted: ${req.debt._id} for user ${req.user.id}`);
+    console.log(`Debt deleted: ${req.debt._id} for user ${req.user._id}`);
     sendResponse(res, 200, true, null, 'Debt deleted successfully');
   } catch (error) {
     console.error('Delete debt error:', error.message);
@@ -105,7 +105,7 @@ export const deleteDebt = async (req, res) => {
 // Get debt repayment strategies
 export const getRepaymentStrategies = async (req, res) => {
   try {
-    const debts = await Debt.find({ user: req.user.id });
+    const debts = await Debt.find({ user: req.user._id }); // Use _id to attach user
     if (!debts.length) {
       return sendResponse(res, 200, true, { snowball: [], avalanche: [] }, 'No debts found');
     }
@@ -157,11 +157,10 @@ export const recordPayment = async (req, res) => {
 
     const parsedAmount = parseFloat(amount);
     debt.balance -= parsedAmount;
-    debt.paymentHistory.push({ amount: parsedAmount, date: new Date(date) });
 
     // Link to transaction (assuming Transaction model exists)
     const transaction = new Transaction({
-      user: req.user.id,
+      user: req.user._id, // Use _id to attach user
       type: 'expense',
       category: 'Debt Repayment',
       amount: parsedAmount,
@@ -170,7 +169,7 @@ export const recordPayment = async (req, res) => {
     });
 
     await Promise.all([debt.save(), transaction.save()]);
-    console.log(`Payment recorded: ${parsedAmount} for debt ${debt._id}, initialBalance=${debt.initialBalance}`);
+    console.log(`Payment recorded: ${parsedAmount} for debt ${debt._id}`);
     sendResponse(res, 200, true, debt, 'Payment recorded successfully');
   } catch (error) {
     console.error('Record payment error:', error.message);
@@ -186,7 +185,7 @@ export const exportDebtsAsCSV = async (req, res) => {
       'Content-Disposition': 'attachment; filename="debts.csv"',
     });
 
-    const debts = await Debt.find({ user: req.user.id });
+    const debts = await Debt.find({ user: req.user._id }); // Use _id to attach user
     const csvStream = csvWrite({
       headers: ['Description', 'Creditor', 'Balance', 'Interest Rate', 'Minimum Payment', 'Due Date'],
     });
@@ -225,7 +224,7 @@ export const exportDebtsAsPDF = async (req, res) => {
     doc.fontSize(16).text('Debt Report', { align: 'center' });
     doc.moveDown();
 
-    const debts = await Debt.find({ user: req.user.id });
+    const debts = await Debt.find({ user: req.user._id }); // Use _id to attach user
     debts.forEach((d, index) => {
       doc.fontSize(12).text(`Debt ${index + 1}`);
       doc.text(`Description: ${d.description || '-'}`);

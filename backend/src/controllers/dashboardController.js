@@ -1,5 +1,3 @@
-// controllers/dashboardController.js
-
 import asyncHandler from 'express-async-handler';
 import Account from '../models/Account.js';
 import Transaction from '../models/Transaction.js';
@@ -30,23 +28,23 @@ export const getDashboardSummary = asyncHandler(async (req, res) => {
 
     // Budgets summary
     const activeBudgets = await Budget.find({ userId });
-    const overBudget = activeBudgets.some(budget => budget.spent > budget.limit);
+    const overBudget = activeBudgets.some(budget => (budget.spent || 0) > (budget.limit || 0));
 
     // Goals summary
     const activeGoals = await Goal.find({ userId }).limit(3);
 
     // Debts summary
     const debts = await Debt.find({ userId });
-    const totalDebt = debts.reduce((sum, debt) => sum + (debt.amountRemaining || 0), 0);
+    const totalDebt = debts.reduce((sum, debt) => sum + (debt.remaining || 0), 0); // Use 'remaining' per Debt.js
     const nextPayment = debts
         .flatMap(debt => debt.payments || [])
-        .filter(payment => new Date(payment.dueDate) >= new Date())
+        .filter(payment => payment.dueDate && new Date(payment.dueDate) >= new Date())
         .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))[0] || null;
 
     // Investments summary
     const investments = await Investment.find({ userId });
     const totalInvestmentValue = investments.reduce((sum, inv) => sum + (inv.currentValue || 0), 0);
-    const topInvestments = investments
+    const recentInvestments = investments
         .sort((a, b) => (b.currentValue || 0) - (a.currentValue || 0))
         .slice(0, 3);
 
@@ -72,7 +70,7 @@ export const getDashboardSummary = asyncHandler(async (req, res) => {
         },
         investments: {
             totalValue: totalInvestmentValue,
-            topInvestments,
+            recentInvestments,
         },
     });
 });

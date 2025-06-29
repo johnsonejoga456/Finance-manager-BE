@@ -50,7 +50,7 @@ export const addTransaction = async (req, res) => {
 
     const convertedAmount = await convertToUSD(amount, currency);
     const transaction = new Transaction({
-      user: req.user.id,
+      user: req.user._id,
       type,
       subType: subType || null,
       amount: splitTransactions ? splitTransactions.reduce((sum, split) => sum + split.amount, 0) : convertedAmount,
@@ -78,7 +78,7 @@ export const addTransaction = async (req, res) => {
 export const getTransactions = async (req, res) => {
   try {
     const { type, category, dateRange, query, sort, page = 1, limit = 10 } = req.query;
-    const filter = { user: req.user.id };
+    const filter = { user: req.user._id };
 
     if (type) filter.type = type;
     if (category) filter.category = category;
@@ -109,7 +109,7 @@ export const getTransactions = async (req, res) => {
 // Get Single Transaction by ID
 export const getTransactionById = async (req, res) => {
   try {
-    const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
+    const transaction = await Transaction.findById(req.params.id).where({ user: req.user._id });
     if (!transaction) {
       return sendResponse(res, 404, false, {}, 'Transaction not found');
     }
@@ -124,7 +124,7 @@ export const getTransactionById = async (req, res) => {
 export const updateTransaction = async (req, res) => {
   try {
     const { type, subType, amount, currency, category, notes, tags, recurrence, splitTransactions, account } = req.body;
-    const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
+    const transaction = await Transaction.findById(req.params.id).where({ user: req.user._id });
 
     if (!transaction) {
       return sendResponse(res, 404, false, {}, 'Transaction not found');
@@ -159,7 +159,7 @@ export const updateTransaction = async (req, res) => {
 // Delete Transaction
 export const deleteTransaction = async (req, res) => {
   try {
-    const transaction = await Transaction.findById(req.params.id).where({ user: req.user.id });
+    const transaction = await Transaction.findById(req.params.id).where({ user: req.user._id });
     if (!transaction) {
       return sendResponse(res, 404, false, {}, 'Transaction not found');
     }
@@ -181,7 +181,7 @@ export const bulkUpdateTransactions = async (req, res) => {
       return sendResponse(res, 400, false, {}, 'transactionIds must be an array');
     }
 
-    const transactions = await Transaction.find({ _id: { $in: transactionIds }, user: req.user.id });
+    const transactions = await Transaction.find({ _id: { $in: transactionIds }, user: req.user._id });
     if (transactions.length !== transactionIds.length) {
       return sendResponse(res, 404, false, {}, 'Some transactions not found or not authorized');
     }
@@ -265,7 +265,7 @@ export const handleRecurringTransactions = () => {
 export const searchTransactions = async (req, res) => {
   try {
     const { startDate, endDate, minAmount, maxAmount, category, type, tags, page = 1, limit = 10 } = req.query;
-    const filters = { user: req.user.id };
+    const filters = { user: req.user._id };
 
     if (startDate || endDate) filters.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
     if (minAmount || maxAmount) filters.amount = { $gte: Number(minAmount), $lte: Number(maxAmount) };
@@ -288,18 +288,18 @@ export const searchTransactions = async (req, res) => {
 // Export Transactions as CSV
 export const exportTransactions = async (req, res) => {
   try {
-    if (!req.user?.id) {
+    if (!req.user?._id) {
       console.warn('Unauthorized access to export CSV: No user ID');
       return sendResponse(res, 401, false, {}, 'Unauthorized: Please log in');
     }
 
-    console.log(`Starting CSV export for user: ${req.user.id}`);
+    console.log(`Starting CSV export for user: ${req.user._id}`);
     res.set({
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename="transactions.csv"',
     });
 
-    const transactions = await Transaction.find({ user: req.user.id }).limit(1000).lean();
+    const transactions = await Transaction.find({ user: req.user._id }).limit(1000).lean();
     console.log(`Fetched ${transactions.length} transactions for CSV export`);
 
     if (!Array.isArray(transactions)) {
@@ -372,7 +372,7 @@ export const exportTransactionsAsPDF = async (req, res) => {
     doc.fontSize(16).text('Transaction Report', { align: 'center' });
     doc.moveDown();
 
-    const cursor = Transaction.find({ user: req.user.id }).limit(1000).cursor();
+    const cursor = Transaction.find({ user: req.user._id }).limit(1000).cursor();
     let index = 0;
 
     cursor
@@ -415,7 +415,7 @@ export const getBudgetStatus = async (req, res) => {
     const { budget } = req.query;
     if (!budget) return sendResponse(res, 400, false, {}, 'Budget parameter is required');
 
-    const transactions = await Transaction.find({ user: req.user.id, type: 'expense' }).limit(1000);
+    const transactions = await Transaction.find({ user: req.user._id, type: 'expense' }).limit(1000);
     const totalExpenses = transactions.reduce((acc, curr) => acc + curr.amount, 0);
     const remainingBudget = Number(budget) - totalExpenses;
 
@@ -429,7 +429,7 @@ export const getBudgetStatus = async (req, res) => {
 // Get Total Income and Expenses
 export const getTotalIncomeAndExpenses = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id }).limit(1000);
+    const transactions = await Transaction.find({ user: req.user._id }).limit(1000);
     const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
     const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
 
@@ -443,7 +443,7 @@ export const getTotalIncomeAndExpenses = async (req, res) => {
 // Get Income vs. Expenses Report
 export const getIncomeVsExpensesReport = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id }).limit(1000);
+    const transactions = await Transaction.find({ user: req.user._id }).limit(1000);
     const report = {
       income: transactions.filter(t => t.type === 'income').map(t => ({ date: t.date, amount: t.amount, category: t.category })),
       expenses: transactions.filter(t => t.type === 'expense').map(t => ({ date: t.date, amount: t.amount, category: t.category })),
@@ -459,7 +459,7 @@ export const getIncomeVsExpensesReport = async (req, res) => {
 // Get Categorical Expense Breakdown
 export const getCategoricalExpenseBreakdown = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id, type: 'expense' }).limit(1000);
+    const transactions = await Transaction.find({ user: req.user._id, type: 'expense' }).limit(1000);
     const breakdown = transactions.reduce((acc, t) => {
       acc[t.category] = (acc[t.category] || 0) + t.amount;
       return acc;
@@ -486,7 +486,7 @@ export const importCSV = async (req, res) => {
       .pipe(parse({ columns: true, trim: true }))
       .on('data', (row) => {
         const tx = {
-          user: req.user.id,
+          user: req.user._id,
           type: row.type,
           subType: row.subType || null,
           amount: parseFloat(row.amount),
