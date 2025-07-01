@@ -13,11 +13,11 @@ const sendResponse = (res, status, success, data = {}, message = '') => {
 export const getAccounts = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    const accounts = await Account.find({ user: req.user._id }) // Use _id to attach user
+    const accounts = await Account.find({ user: req.user._id })
       .sort({ name: 1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
-    const total = await Account.countDocuments({ user: req.user._id }); // Use _id to attach user
+    const total = await Account.countDocuments({ user: req.user._id });
     console.log(`Fetched ${accounts.length} accounts for user ${req.user._id}, page ${page}`);
     sendResponse(res, 200, true, { accounts, total });
   } catch (error) {
@@ -41,7 +41,7 @@ export const addAccount = async (req, res) => {
     }
 
     const account = new Account({
-      user: req.user._id, // Use _id to attach user
+      user: req.user._id,
       name,
       type,
       balance: parseFloat(balance),
@@ -63,7 +63,7 @@ export const addAccount = async (req, res) => {
 export const updateAccount = async (req, res) => {
   try {
     const { name, type, balance, currency, institution, notes } = req.body;
-    const account = await Account.findById(req.params.id).where({ user: req.user._id }); // Use _id to attach user
+    const account = await Account.findById(req.params.id).where({ user: req.user._id });
 
     if (!account) {
       return sendResponse(res, 404, false, {}, 'Account not found');
@@ -97,7 +97,7 @@ export const updateAccount = async (req, res) => {
 export const deleteAccount = async (req, res) => {
   try {
     const { cascade = 'false' } = req.query;
-    const account = await Account.findById(req.params.id).where({ user: req.user._id }); // Use _id to attach user
+    const account = await Account.findById(req.params.id).where({ user: req.user._id });
     if (!account) {
       return sendResponse(res, 404, false, {}, 'Account not found');
     }
@@ -108,7 +108,7 @@ export const deleteAccount = async (req, res) => {
     }
 
     if (cascade === 'true') {
-      await Transaction.deleteMany({ account: account._id, user: req.user._id }); // Use _id to attach user
+      await Transaction.deleteMany({ account: account._id, user: req.user._id });
       console.log(`Deleted ${transactionCount} transactions for account ${account._id}`);
     }
 
@@ -125,12 +125,12 @@ export const deleteAccount = async (req, res) => {
 export const getAccountTransactions = async (req, res) => {
   try {
     const { page = 1, limit = 10, dateRange, category } = req.query;
-    const account = await Account.findById(req.params.id).where({ user: req.user._id }); // Use _id to attach user
+    const account = await Account.findById(req.params.id).where({ user: req.user._id });
     if (!account) {
       return sendResponse(res, 404, false, {}, 'Account not found');
     }
 
-    const filter = { user: req.user._id, account: req.params.id }; // Use _id to attach user
+    const filter = { user: req.user._id, account: req.params.id };
     if (dateRange) {
       const [startDate, endDate] = dateRange.split(',');
       filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
@@ -155,7 +155,7 @@ export const getAccountTransactions = async (req, res) => {
 // Update account balance
 export const updateAccountBalance = async (req, res) => {
   try {
-    const account = await Account.findById(req.params.id).where({ user: req.user._id }); // Use _id to attach user
+    const account = await Account.findById(req.params.id).where({ user: req.user._id });
     if (!account) {
       return sendResponse(res, 404, false, {}, 'Account not found');
     }
@@ -183,7 +183,7 @@ export const updateAccountBalance = async (req, res) => {
 // Export accounts to CSV
 export const exportAccountsToCSV = async (req, res) => {
   try {
-    const accounts = await Account.find({ user: req.user._id }).sort({ name: 1 }); // Use _id to attach user
+    const accounts = await Account.find({ user: req.user._id }).sort({ name: 1 });
     res.set({
       'Content-Type': 'text/csv',
       'Content-Disposition': 'attachment; filename="accounts.csv"',
@@ -213,7 +213,7 @@ export const exportAccountsToCSV = async (req, res) => {
 // Export accounts to PDF
 export const exportAccountsToPDF = async (req, res) => {
   try {
-    const accounts = await Account.find({ user: req.user._id }).sort({ name: 1 }); // Use _id to attach user
+    const accounts = await Account.find({ user: req.user._id }).sort({ name: 1 });
     res.set({
       'Content-Type': 'application/pdf',
       'Content-Disposition': 'attachment; filename="accounts.pdf"',
