@@ -35,11 +35,6 @@ const TransactionSchema = new mongoose.Schema({
     required: false, 
     maxlength: [500, 'Notes cannot exceed 500 characters'] 
   },
-  tags: { 
-    type: [String], 
-    required: false,
-    default: [] 
-  },
   recurrence: { 
     type: String, 
     enum: ['daily', 'weekly', 'monthly'], 

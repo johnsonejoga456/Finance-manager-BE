@@ -46,7 +46,7 @@ const updateAccountBalance = async (accountId) => {
 // Add Transaction
 export const addTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, category, date, notes, tags, recurrence, currency = 'USD', splitTransactions, account } = req.body;
+    const { type, subType, amount, category, date, notes, recurrence, currency = 'USD', splitTransactions, account } = req.body;
 
     const convertedAmount = await convertToUSD(amount, currency);
     const transaction = new Transaction({
@@ -59,7 +59,6 @@ export const addTransaction = async (req, res) => {
       category,
       date: date || Date.now(),
       notes,
-      tags,
       recurrence,
       splitTransactions: splitTransactions || [],
       account,
@@ -90,7 +89,6 @@ export const getTransactions = async (req, res) => {
       filter.$or = [
         { notes: { $regex: query, $options: 'i' } },
         { category: { $regex: query, $options: 'i' } },
-        { tags: { $regex: query, $options: 'i' } },
       ];
     }
 
@@ -123,7 +121,7 @@ export const getTransactionById = async (req, res) => {
 // Update Transaction
 export const updateTransaction = async (req, res) => {
   try {
-    const { type, subType, amount, currency, category, notes, tags, recurrence, splitTransactions, account } = req.body;
+    const { type, subType, amount, currency, category, notes, recurrence, splitTransactions, account } = req.body;
     const transaction = await Transaction.findById(req.params.id).where({ user: req.user._id });
 
     if (!transaction) {
@@ -140,7 +138,6 @@ export const updateTransaction = async (req, res) => {
       currency: currency || transaction.currency,
       category: category || transaction.category,
       notes: notes || transaction.notes,
-      tags: tags || transaction.tags,
       recurrence: recurrence || transaction.recurrence,
       splitTransactions: splitTransactions || transaction.splitTransactions,
       account: account || transaction.account,
@@ -176,7 +173,7 @@ export const deleteTransaction = async (req, res) => {
 // Bulk Update Transactions
 export const bulkUpdateTransactions = async (req, res) => {
   try {
-    const { transactionIds, category, tags, action } = req.body;
+    const { transactionIds, category, action } = req.body;
     if (!transactionIds || !Array.isArray(transactionIds)) {
       return sendResponse(res, 400, false, {}, 'transactionIds must be an array');
     }
@@ -197,7 +194,6 @@ export const bulkUpdateTransactions = async (req, res) => {
 
     const updates = {};
     if (category) updates.category = category;
-    if (tags) updates.tags = tags;
 
     await Transaction.updateMany(
       { _id: { $in: transactionIds } },
@@ -247,7 +243,6 @@ export const handleRecurringTransactions = () => {
             category: transaction.category,
             date: now,
             notes: transaction.notes,
-            tags: transaction.tags,
             account: transaction.account,
           });
           await newTransaction.save();
@@ -264,14 +259,13 @@ export const handleRecurringTransactions = () => {
 // Search Transactions
 export const searchTransactions = async (req, res) => {
   try {
-    const { startDate, endDate, minAmount, maxAmount, category, type, tags, page = 1, limit = 10 } = req.query;
+    const { startDate, endDate, minAmount, maxAmount, category, type, page = 1, limit = 10 } = req.query;
     const filters = { user: req.user._id };
 
     if (startDate || endDate) filters.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
     if (minAmount || maxAmount) filters.amount = { $gte: Number(minAmount), $lte: Number(maxAmount) };
     if (category) filters.category = category;
     if (type) filters.type = type;
-    if (tags) filters.tags = { $in: tags.split(',') };
 
     const transactions = await Transaction.find(filters)
       .sort({ date: -1 })
@@ -494,7 +488,6 @@ export const importCSV = async (req, res) => {
           currency: row.currency || 'USD',
           category: row.category,
           notes: row.notes || '',
-          tags: row.tags ? row.tags.split(',') : [],
           recurrence: row.recurrence || null,
           date: new Date(row.date),
           account: row.account || null,

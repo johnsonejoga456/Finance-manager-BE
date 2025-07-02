@@ -7,10 +7,12 @@ const checkBudgetOwnership = async (req, res, next) => {
       console.warn(`Budget not found: ${req.params.id}`);
       return res.status(404).json({ success: false, message: 'Budget not found' });
     }
-    if (budget.user.toString() !== req.user.id) {
-      console.warn(`Unauthorized access to budget ${req.params.id} by user ${req.user.id}`);
+
+    if (budget.user.toString() !== req.user._id) {
+      console.warn(`Unauthorized access to budget ${req.params.id} by user ${req.user._id}`);
       return res.status(401).json({ success: false, message: 'Not authorized' });
     }
+
     req.budget = budget;
     next();
   } catch (error) {
@@ -18,4 +20,5 @@ const checkBudgetOwnership = async (req, res, next) => {
     res.status(500).json({ success: false, message: `Server error: ${error.message}` });
   }
 };
+
 export default checkBudgetOwnership;
