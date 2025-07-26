@@ -23,22 +23,29 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// Configure Socket.IO
-const io = new Server(server, {
-  path: '/socket.io',
-  cors: {
-    origin: [
-      'http://localhost:3000',
-      'https://finance-manager-app-fe.vercel.app'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    credentials: true,
-  },
-  transports: ['websocket', 'polling'],
-});
+// Log CORS origins for debugging
+console.log('Loaded CORS_ORIGIN from .env:', process.env.CORS_ORIGIN);
 
-// Log CORS config
-console.log('CORS allowed origins:', process.env.CORS_ORIGIN || '*');
+// Define allowed origins explicitly
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',')
+  : ['http://localhost:3000', 'https://finance-manager-app-fe.vercel.app'];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+// Preflight support for all routes
+app.options('*', cors(corsOptions));
+
+// Apply middleware
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(morgan('dev'));
+app.use(fileUpload());
 
 // Validation middleware
 const handleValidationErrors = (req, res, next) => {
@@ -48,24 +55,11 @@ const handleValidationErrors = (req, res, next) => {
   }
   next();
 };
-
-// CORS Configuration
-const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(morgan('dev'));
 app.use(handleValidationErrors);
-app.use(fileUpload());
 
-// Log requests
+// Request logging
 app.use((req, res, next) => {
-  console.log(`Received ${req.method} request to ${req.url} from ${req.headers.origin}`);
+  console.log(`Received ${req.method} to ${req.url} from ${req.headers.origin}`);
   next();
 });
 
@@ -89,7 +83,7 @@ mongoose
     process.exit(1);
   });
 
-// API Routes
+// API routes
 app.use('/api/auth', authRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/goals', goalRouter);
@@ -100,10 +94,20 @@ app.use('/api/accounts', accountRouter);
 app.use('/api/investments', investmentRouter);
 app.use('/api/notifications', notificationRouter);
 
-// Error handling
+// Error handler
 app.use(errorHandler);
 
-// Socket.IO
+// Socket.IO configuration
+const io = new Server(server, {
+  path: '/socket.io',
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    credentials: true,
+  },
+  transports: ['websocket', 'polling'],
+});
+
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
   socket.on('disconnect', () => {
@@ -114,5 +118,6 @@ io.on('connection', (socket) => {
   });
 });
 
+// Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
