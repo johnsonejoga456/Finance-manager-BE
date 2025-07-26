@@ -23,18 +23,24 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Configure Socket.IO
 const io = new Server(server, {
+  path: '/socket.io',
   cors: {
     origin: [
       'http://localhost:3000',
       'https://finance-manager-app-fe.vercel.app'
     ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   },
+  transports: ['websocket', 'polling'],
 });
 
-// Middleware for validation errors
+// Log CORS config
+console.log('CORS allowed origins:', process.env.CORS_ORIGIN || '*');
+
+// Validation middleware
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -45,7 +51,7 @@ const handleValidationErrors = (req, res, next) => {
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*', 
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -57,17 +63,31 @@ app.use(morgan('dev'));
 app.use(handleValidationErrors);
 app.use(fileUpload());
 
+// Log requests
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request to ${req.url} from ${req.headers.origin}`);
+  next();
+});
+
 // Disable caching
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
   next();
 });
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).send('Health check OK');
+});
+
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, { retryWrites: true, w: 'majority' })
   .then(() => console.log('MongoDB connected successfully'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 // API Routes
 app.use('/api/auth', authRouter);
@@ -80,14 +100,17 @@ app.use('/api/accounts', accountRouter);
 app.use('/api/investments', investmentRouter);
 app.use('/api/notifications', notificationRouter);
 
-// Error handling middleware
+// Error handling
 app.use(errorHandler);
 
-// Start Socket.IO for notifications
+// Socket.IO
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
+  });
+  socket.on('error', (error) => {
+    console.error('Socket.IO error:', error);
   });
 });
 
