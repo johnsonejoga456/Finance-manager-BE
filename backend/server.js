@@ -105,10 +105,10 @@ io.engine.on('headers', (headers, req) => {
 
 // WebSocket connection logic
 io.on('connection', (socket) => {
-  console.log(`✅ New WebSocket client connected: ${socket.id}`);
+  console.log(`New WebSocket client connected: ${socket.id}`);
 
   socket.on('disconnect', () => {
-    console.log(`⚠️ Client disconnected: ${socket.id}`);
+    console.log(`Client disconnected: ${socket.id}`);
   });
 
   socket.on('error', (error) => {
@@ -117,5 +117,5 @@ io.on('connection', (socket) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
